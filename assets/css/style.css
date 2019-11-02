@@ -1,0 +1,17 @@
+:root {
+  --ion-safe-area-top: 20px;
+  --ion-safe-area-bottom: 22px;
+}
+
+.loading {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.loading ion-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -17,7 +17,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
     />
-    <link rel="stylesheet" type="text/css" href="./assets/css/UiStyle.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
     <title>Project Team Digital</title>
   </head>
 
@@ -60,11 +60,16 @@
             <div id="pageTitle"></div>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding"> </ion-content>
+        <ion-content>
+          <div class="loading ion-hide">
+            <ion-spinner></ion-spinner>
+          </div>
+          <div class="content"></div>
+        </ion-content>
       </div>
     </ion-app>
     <ion-menu-controller></ion-menu-controller>
 
-    <script src="./assets/javascript/UiScripts.js"></script>
+    <script src="./assets/javascript/app.js"></script>
   </body>
 </html>
