@@ -12,18 +12,17 @@
       nomodule
       src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
     ></script>
-    <script src="UiScripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
     />
-    <link rel="stylesheet" type="text/css" href="UiStyle.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/css/UiStyle.css" />
     <title>Project Team Digital</title>
   </head>
 
   <body>
-    <ion-app>
+    <ion-app class="appPage">
       <ion-menu side="start">
         <ion-header>
           <ion-toolbar translucent>
@@ -65,5 +64,7 @@
       </div>
     </ion-app>
     <ion-menu-controller></ion-menu-controller>
+
+    <script src="./assets/javascript/UiScripts.js"></script>
   </body>
 </html>
