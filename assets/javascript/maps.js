@@ -65,38 +65,32 @@ $( document ).ready(function() {
     database.ref("locations").on("value", function(snapshot) {
         const data = snapshot.val();
 
+
+        // clear all markers
+        for (let i = 0; i < locations.length; i++) {
+                locations[i].marker.remove();
+        };
+
+        // clear locations array
         locations = [];
 
+        // repopulate array with full object including marker which also redraws markers
         _.forEach(data, element => {
+            
             locations.push(addLocation(element.id, element.name, element.address, element.x, element.y));
         });
 
+
         RedrawList()
-
-
-
-        // var id1 = snapshot.val().id;
-        // var addText1 = snapshot.val().name;
-        // var addAddress1 = snapshot.val().address;
-        // var addX1 = snapshot.val().x;
-        // var addY1 = snapshot.val().y;
-
-        
-   
-        // locations.push(addLocation(id1, addText1, addAddress1, addX1, addY1));
-        // RedrawList();
-
 
     }, function(errorObject) {
         // Create Error Handling
 
         console.log('Errors handled: ' + ErrorObject.code);
-
     });
 
 
 });
-
 
 
 // adds current location to locations array as object
@@ -113,6 +107,8 @@ function addLocation(idCounter, name, address, x, y) {
     };
   };
 
+
+
 $('#add-marker').on("click", function() {
     if (geoResponse == undefined) {
         $('#location-list').append('Search for a building, street or landmark first!');
@@ -128,17 +124,22 @@ $('#add-marker').on("click", function() {
         // push location to array
         idCounter++;
 
-        database.ref('locations').push(_.omit(addLocation(idCounter, addText, addAddress, addX, addY), ['marker']));
+        // database.ref('locations').push(_.omit(addLocation(idCounter, addText, addAddress, addX, addY), ['marker']));
+       
+       
+       
+        // push everything including marker to locations array
+        locations.push(addLocation(idCounter, addText, addAddress, addX, addY));
 
-        console.log('locations array:');
+        console.log('locations array after ADD MARKER:');
         console.log(locations);
 
 
+        // send the data to firebase but not the marker
         database.ref().set({
             locations: _(locations).map(place => {
                 return  _.omit(place, ['marker']);
             }).value()
-
         });
 
 
@@ -154,6 +155,9 @@ $('#center-button').on("click", function() {
     CenterMap();
 
 });
+
+
+
 
 // refreshes itinery list
 function RedrawList() {
@@ -193,9 +197,14 @@ function CenterMap() {
         padding: 100
         });
 
+    } else {
+
+        map.flyTo({
+            center: [30, 7],
+            zoom: 1 
+            });
     
     };
-
 };
 
 
@@ -217,8 +226,17 @@ $('body').on('click', '.remove-location', function (){
 
     };
 
+    console.log('locations array after Delete Marker:');
+    console.log(locations);
 
-firebase.ref('locations').child(key).remove();
+
+    // send the data to firebase but not the marker
+    database.ref().set({
+        locations: _(locations).map(place => {
+            return  _.omit(place, ['marker']);
+        }).value()
+    });
+
 
     console.log(locations);
     
@@ -226,4 +244,3 @@ firebase.ref('locations').child(key).remove();
     CenterMap();
 
 });
-
