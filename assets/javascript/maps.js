@@ -2,6 +2,9 @@
 let geoResponse;
 let locations = [];
 let idCounter = 0;
+let currentX = 0;
+let currentY = 0;
+
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -26,8 +29,9 @@ mapboxgl.accessToken =
 var map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/light-v10",
+  logoPosition : 'bottom-right',
   center: [30, 7],
-  zoom: 1,
+  zoom: .9,
   pitch: 0,
   maxZoom: 18
 });
@@ -42,12 +46,14 @@ var geocoder = new MapboxGeocoder({
   mapboxgl: mapboxgl
 });
 
-map.addControl(geocoder, "top-right");
+map.addControl(geocoder, "bottom-left");
 
 map.on("load", function() {
   // Listen for the `geocoder.input` event that is triggered when a user makes a search
   geocoder.on("result", function(ev) {
     geoResponse = ev.result;
+    currentX = geoResponse.geometry.coordinates[0];
+    currentY = geoResponse.geometry.coordinates[1];
 
     var iconz = document.getElementById("scope-div");
     pointerX = geoResponse.geometry.coordinates[0];
@@ -166,7 +172,8 @@ function RedrawList() {
 
   for (let i = 0; i < locations.length; i++) {
     $("#location-list").append(`
-        ${locations[i].name} <input type="button" class="remove-location btn-dark" value="X" data-number="${locations[i].id}"><br>
+        ${locations[i].name} <input type="button" class="remove-location btn-dark" value="X" data-number="${locations[i].id}">
+        <input type="button" class="zoom-location btn-dark" value="O" data-number="${locations[i].id}"><br>
         <h6>${locations[i].address}<br>
         X: ${locations[i].x} Y:${locations[i].y}</h6>
         `);
@@ -200,7 +207,7 @@ function CenterMap() {
     // if no markers left then zoom out and center map back to inital state
     map.flyTo({
       center: [30, 7],
-      zoom: 1
+      zoom: 0.99
     });
   }
 }
@@ -232,3 +239,86 @@ $("body").on("click", ".remove-location", function() {
   RedrawList();
   CenterMap();
 });
+
+
+
+$("body").on("click", ".zoom-location", function() {
+
+  let keyToZoom = $(this).attr("data-number");
+  for (let i = 0; i < locations.length; i++) {
+    if (locations[i].id == keyToZoom) {
+      map.flyTo({
+        center: [locations[i].x, locations[i].y],
+        zoom: 10
+      });
+
+      currentX = locations[i].x;
+      currentY = locations[i].y;
+
+    }
+  }
+
+});
+
+
+// accomodation button onclick listener
+$("#accom-button").on("click", function() {
+  // let zoomLevel = map.getZoom();
+  // alert(zoomLevel);
+  // if (zoomLevel < 10) {
+  //   alert('Search is too broad. You need to zoom in further to display Accomodation');
+  // } else {
+  //   alert('display accomodation layer');
+  // };
+
+
+  let x = currentX;
+  let y = currentY;
+
+console.log('Coordinates of point of focus:')
+console.log(x + ':' + y);
+
+  // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
+  AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
+
+// console.log(geoResponse);
+
+});
+
+
+// AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
+
+// map.on("zoom", function() {
+
+//   // map.jumpTo({pitch: 20})
+// //   const currentZoom = map.getZoom();
+// //   map.setPitch(20);
+// // //   if (currentZoom < 10) {
+// // //     map.setPitch({
+
+// // //       pitch: 0 // Angle of cameraview
+  
+// // //   });
+// // //   } else if (currentZoom > 5) {
+// // //     map.setPitch({
+
+// // //       pitch: 20 // Angle of cameraview
+  
+// // //   });
+// // //   } else if (currentZoom > 10) {
+// // //     map.setPitch({
+
+// // //       pitch: 40 // Angle of cameraview
+  
+// // //   });
+// // //   } else if (currentZoom > 15) {
+// // //     map.setPitch({
+
+// // //       pitch: 60 // Angle of cameraview
+  
+// // //   });
+// // //   };
+
+
+
+// });
