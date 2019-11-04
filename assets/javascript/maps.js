@@ -2,11 +2,8 @@
 // my globalish variables
 let geoResponse;
 let locations = [];
-let idCounter = -1;
+let idCounter = 0;
 
-
-
- 
  
    // Your web app's Firebase configuration
    var firebaseConfig = {
@@ -40,8 +37,13 @@ var map = new mapboxgl.Map({
 // search input box
 var geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
+    // anchor: 'center',
+    
+    placeholder: "Where to?",
+    marker: false,
     mapboxgl: mapboxgl
 });
+
 map.addControl(geocoder, 'top-right');
 
 
@@ -52,10 +54,17 @@ map.on('load', function() {
     geocoder.on('result', function(ev) {
 
         geoResponse = ev.result;
+
+        var iconz = document.getElementById("scope-div");
+        pointerX = geoResponse.geometry.coordinates[0];
+        pointerY = geoResponse.geometry.coordinates[1];
+        $("#scope-div").css("display", "block");
+        // add marker to map
+        new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
+
     });
 
 });
-
 
 
 
@@ -65,38 +74,41 @@ $( document ).ready(function() {
     database.ref("locations").on("value", function(snapshot) {
         const data = snapshot.val();
 
-        locations = [];
-
-        _.forEach(data, element => {
-            locations.push(addLocation(element.id, element.name, element.address, element.x, element.y));
-        });
-
-        RedrawList()
-
-
-
-        // var id1 = snapshot.val().id;
-        // var addText1 = snapshot.val().name;
-        // var addAddress1 = snapshot.val().address;
-        // var addX1 = snapshot.val().x;
-        // var addY1 = snapshot.val().y;
-
+        // if (data == null) {
+        //     alert (' we are null ')
+        //     idCounter == 0;
+        // } else {
         
-   
-        // locations.push(addLocation(id1, addText1, addAddress1, addX1, addY1));
-        // RedrawList();
+            // clear all markers
+            for (let i = 0; i < locations.length; i++) {
+                    locations[i].marker.remove();
+            };
 
 
-    }, function(errorObject) {
-        // Create Error Handling
+            // clear locations array
+            locations = [];
 
-        console.log('Errors handled: ' + ErrorObject.code);
+            // repopulate array with full object including marker which also redraws markers
+            _.forEach(data, element => {         
+                locations.push(addLocation(element.id, element.name, element.address, element.x, element.y));
+                
+                highestID = 0;
+                if (element.id > highestID) highestID = element.id;
+                idCounter = highestID;
+            });
+        
+        // };
 
-    });
+        RedrawList();
+        CenterMap();
+        }, function(errorObject) {
+            // Create Error Handling
+
+            console.log('Errors handled: ' + ErrorObject.code);
+        });
 
 
 });
-
 
 
 // adds current location to locations array as object
@@ -113,13 +125,15 @@ function addLocation(idCounter, name, address, x, y) {
     };
   };
 
+
+
 $('#add-marker').on("click", function() {
     if (geoResponse == undefined) {
         $('#location-list').append('Search for a building, street or landmark first!');
     } else {
-        console.log(geoResponse);
+        $("#scope-div").css("display", "none");
 
-
+        
         let addText = geoResponse.text
         let addAddress = geoResponse.place_name;
         let addX = geoResponse.geometry.coordinates[0];
@@ -127,18 +141,20 @@ $('#add-marker').on("click", function() {
 
         // push location to array
         idCounter++;
+       
+       
+        // push everything including marker to locations array
+        locations.push(addLocation(idCounter, addText, addAddress, addX, addY));
 
-        database.ref('locations').push(_.omit(addLocation(idCounter, addText, addAddress, addX, addY), ['marker']));
-
-        console.log('locations array:');
+        console.log('locations array after ADD MARKER:');
         console.log(locations);
 
 
+        // send the data to firebase but not the marker
         database.ref().set({
             locations: _(locations).map(place => {
                 return  _.omit(place, ['marker']);
             }).value()
-
         });
 
 
@@ -148,12 +164,15 @@ $('#add-marker').on("click", function() {
     };
 });
 
+
 // center button onclick listener
 $('#center-button').on("click", function() {
 
     CenterMap();
 
 });
+
+
 
 // refreshes itinery list
 function RedrawList() {
@@ -170,20 +189,18 @@ function RedrawList() {
     };
 };
     
-// Center the map, zooming to include all locations added
+
 function CenterMap() {
 
-    if (locations.length > 0) {
 
-    // get coordinates from locations object
+    if (locations.length > 1) {
+        // zooming to include all markers
         var coordinates = [];
-        
+        // get coordinates from locations object
         for (let i = 0; i < locations.length; i++) {
             let arrToPush = [locations[i].x, locations[i].y]
             coordinates.push(arrToPush);
         };
-
-        console.log(coordinates);
 
         var bounds = coordinates.reduce(function(bounds, coord) {
         return bounds.extend(coord);
@@ -193,9 +210,22 @@ function CenterMap() {
         padding: 100
         });
 
+    } else if (locations.length == 1) {
+
+        // just one location zoom setting and center in
+        map.flyTo({
+            center: [locations[0].x, locations[0].y],
+            zoom: 10
+            });
+
+    } else {
+        // if no markers left then zoom out and center map back to inital state
+        map.flyTo({
+            center: [30, 7],
+            zoom: 1 
+            });
     
     };
-
 };
 
 
@@ -217,13 +247,19 @@ $('body').on('click', '.remove-location', function (){
 
     };
 
-
-firebase.ref('locations').child(key).remove();
-
+    console.log('locations array after Delete Marker:');
     console.log(locations);
+
+
+    // send the data to firebase but not the marker
+    database.ref().set({
+        locations: _(locations).map(place => {
+            return  _.omit(place, ['marker']);
+        }).value()
+    });
+
     
     RedrawList();
     CenterMap();
 
 });
-
