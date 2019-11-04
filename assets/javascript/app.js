@@ -33,11 +33,25 @@ function navPage() {
 function itePage() {
   $("#pageTitle").html(`<ion-title>Itinerary Page</ion-title>`);
   document.querySelector("ion-menu-controller").close();
+  toggleLoadingScreen("show");
+  $.ajax("./assets/HTMLPages/construction.html")
+    .then(response => {
+      $(".content").html(response);
+      toggleLoadingScreen("hide");
+    })
+    .catch(error => console.error(error));
 }
 
 function chatPage() {
   $("#pageTitle").html(`<ion-title>Live Chat Page</ion-title>`);
   document.querySelector("ion-menu-controller").close();
+  toggleLoadingScreen("show");
+  $.ajax("./assets/HTMLPages/construction.html")
+    .then(response => {
+      $(".content").html(response);
+      toggleLoadingScreen("hide");
+    })
+    .catch(error => console.error(error));
 }
 
 $(document).ready(function() {
