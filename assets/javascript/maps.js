@@ -1,37 +1,12 @@
-// my globalish variables
-let geoResponse;
-let locations = [];
-let idCounter = 0;
-let currentX = 0;
-let currentY = 0;
-
-
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
-  authDomain: "projectone-f20d7.firebaseapp.com",
-  databaseURL: "https://projectone-f20d7.firebaseio.com",
-  projectId: "projectone-f20d7",
-  storageBucket: "projectone-f20d7.appspot.com",
-  messagingSenderId: "871353924736",
-  appId: "1:871353924736:web:5b3376a4c2bfa2581dba65",
-  measurementId: "G-J13VTRGL7G"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-//    firebase.analytics();
-
-var database = firebase.database();
-
 // the map canvas itself
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ";
 var map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/light-v10",
-  logoPosition : 'bottom-right',
+  logoPosition: "bottom-right",
   center: [30, 7],
-  zoom: .9,
+  zoom: 0.9,
   pitch: 0,
   maxZoom: 18
 });
@@ -235,10 +210,7 @@ $("body").on("click", ".remove-location", function() {
   CenterMap();
 });
 
-
-
 $("body").on("click", ".zoom-location", function() {
-
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
@@ -249,12 +221,9 @@ $("body").on("click", ".zoom-location", function() {
 
       currentX = locations[i].x;
       currentY = locations[i].y;
-
     }
   }
-
 });
-
 
 // accomodation button onclick listener
 $("#accom-button").on("click", function() {
@@ -266,9 +235,9 @@ $("#accom-button").on("click", function() {
   //   alert('display accomodation layer');
   // };
 
-
   let x = currentX;
   let y = currentY;
+
 
   if (x == 0 && y == 0){
     alert('Please give us an idea of where you want to stay!');
@@ -282,8 +251,8 @@ $("#accom-button").on("click", function() {
 
   // console.log(geoResponse);
   };
-});
 
+});
 
 // AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
 
@@ -296,28 +265,26 @@ $("#accom-button").on("click", function() {
 // // //     map.setPitch({
 
 // // //       pitch: 0 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 5) {
 // // //     map.setPitch({
 
 // // //       pitch: 20 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 10) {
 // // //     map.setPitch({
 
 // // //       pitch: 40 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 15) {
 // // //     map.setPitch({
 
 // // //       pitch: 60 // Angle of cameraview
-  
+
 // // //   });
 // // //   };
-
-
 
 // });
