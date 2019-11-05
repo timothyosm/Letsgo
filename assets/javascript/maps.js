@@ -39,16 +39,14 @@ map.on("load", function() {
   });
 });
 
-$(document).ready(function() {
-  database.ref("locations").on(
-    "value",
-    function(snapshot) {
-      const data = snapshot.val();
 
-      // if (data == null) {
-      //     alert (' we are null ')
-      //     idCounter == 0;
-      // } else {
+$(document).ready(function() {
+  
+  userCheck();
+
+  database.ref(`${UUID}/locations`).on("value", function(snapshotB) {
+
+      const data = snapshotB.val();
 
       // clear all markers
       for (let i = 0; i < locations.length; i++) {
@@ -75,17 +73,14 @@ $(document).ready(function() {
         idCounter = highestID;
       });
 
-      // };
-
       RedrawList();
       CenterMap();
     },
     function(errorObject) {
-      // Create Error Handling
 
+      // Create Error Handling
       console.log("Errors handled: " + ErrorObject.code);
-    }
-  );
+    });
 });
 
 // adds current location to locations array as object
@@ -123,7 +118,7 @@ $("#add-marker").on("click", function() {
     console.log(locations);
 
     // send the data to firebase but not the marker
-    database.ref().set({
+    database.ref(UUID).set({
       locations: _(locations)
         .map(place => {
           return _.omit(place, ["marker"]);
@@ -203,7 +198,7 @@ $("body").on("click", ".remove-location", function() {
   console.log(locations);
 
   // send the data to firebase but not the marker
-  database.ref().set({
+  database.ref(UUID).set({
     locations: _(locations)
       .map(place => {
         return _.omit(place, ["marker"]);
@@ -243,13 +238,20 @@ $("#accom-button").on("click", function() {
   let x = currentX;
   let y = currentY;
 
-  console.log("Coordinates of point of focus:");
-  console.log(x + ":" + y);
 
-  // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-  AccomRequest(x - 0.1, y - 0.1, x + 0.1, y + 0.1);
+  if (x == 0 && y == 0){
+    alert('Please give us an idea of where you want to stay!');
+  } else {
+
+    console.log('Coordinates of point of focus:')
+    console.log(x + ':' + y);
+
+    // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
+    AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
 
   // console.log(geoResponse);
+  };
+
 });
 
 // AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
