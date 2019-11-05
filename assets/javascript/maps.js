@@ -69,43 +69,43 @@ $(document).ready(function() {
   
   userCheck();
 
-  database.ref(`${UUID}/locations`).on("value", function(snapshotB) {
+  // database.ref(`${UUID}/locations`).on("value", function(snapshotB) {
+  //   console.log('reloadedMaps');
+  //     const data2 = snapshotB.val();
 
-      const data = snapshotB.val();
+  //     // clear all markers
+  //     for (let i = 0; i < locations.length; i++) {
+  //       locations[i].marker.remove();
+  //     }
 
-      // clear all markers
-      for (let i = 0; i < locations.length; i++) {
-        locations[i].marker.remove();
-      }
+  //     // clear locations array
+  //     locations = [];
 
-      // clear locations array
-      locations = [];
+  //     // repopulate array with full object including marker which also redraws markers
+  //     _.forEach(data2, element => {
+  //       locations.push(
+  //         addLocation(
+  //           element.id,
+  //           element.name,
+  //           element.address,
+  //           element.x,
+  //           element.y
+  //         )
+  //       );
 
-      // repopulate array with full object including marker which also redraws markers
-      _.forEach(data, element => {
-        locations.push(
-          addLocation(
-            element.id,
-            element.name,
-            element.address,
-            element.x,
-            element.y
-          )
-        );
+  //       highestID = 0;
+  //       if (element.id > highestID) highestID = element.id;
+  //       idCounter = highestID;
+  //     });
 
-        highestID = 0;
-        if (element.id > highestID) highestID = element.id;
-        idCounter = highestID;
-      });
+  //     RedrawList();
+  //     CenterMap();
+  //   },
+  //   function(errorObject) {
 
-      RedrawList();
-      CenterMap();
-    },
-    function(errorObject) {
-
-      // Create Error Handling
-      console.log("Errors handled: " + ErrorObject.code);
-    });
+  //     // Create Error Handling
+  //     console.log("Errors handled: " + ErrorObject.code);
+  //   });
 });
 
 // adds current location to locations array as object
@@ -151,8 +151,7 @@ $("#add-marker").on("click", function() {
         .value()
     });
 
-    // RedrawList(); // run redraw funtion
-    CenterMap();
+   
   }
 });
 
@@ -231,8 +230,7 @@ $("body").on("click", ".remove-location", function() {
       .value()
   });
 
-  RedrawList();
-  CenterMap();
+
 });
 
 
@@ -283,6 +281,21 @@ $("#accom-button").on("click", function() {
   // console.log(geoResponse);
   };
 });
+
+
+// // food button onclick listener
+// $("#food-button").on("click", function() {
+
+//   let x = currentX;
+//   let y = currentY;
+
+//   if (x == 0 && y == 0){
+//     alert('Please give us an idea of where you want to stay!');
+//   } else {
+//     food(x, y);
+//   };
+
+// });
 
 
 // AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING

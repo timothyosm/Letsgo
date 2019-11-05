@@ -22,11 +22,11 @@ function userCheck() {
   else {
       UUID = idInurl;
 
-      database.ref(UUID).once(
+      database.ref(UUID).on(
           "value",
           function(snapshot) {
             const data = snapshot.val().locations;
-              
+              console.log('reloadedUsers');
             // clear all markers
             for (let i = 0; i < locations.length; i++) {
               locations[i].marker.remove();
