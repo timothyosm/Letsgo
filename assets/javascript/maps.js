@@ -1,10 +1,9 @@
 // my globalish variables
-let geoResponse;
+let geoResponse = undefined;
 let locations = [];
 let idCounter = 0;
 let currentX = 0;
 let currentY = 0;
-
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -29,9 +28,9 @@ mapboxgl.accessToken =
 var map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/light-v10",
-  logoPosition : 'bottom-right',
+  logoPosition: "bottom-right",
   center: [30, 7],
-  zoom: .9,
+  zoom: 0.9,
   pitch: 0,
   maxZoom: 18
 });
@@ -240,10 +239,7 @@ $("body").on("click", ".remove-location", function() {
   CenterMap();
 });
 
-
-
 $("body").on("click", ".zoom-location", function() {
-
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
@@ -254,12 +250,9 @@ $("body").on("click", ".zoom-location", function() {
 
       currentX = locations[i].x;
       currentY = locations[i].y;
-
     }
   }
-
 });
-
 
 // accomodation button onclick listener
 $("#accom-button").on("click", function() {
@@ -271,20 +264,17 @@ $("#accom-button").on("click", function() {
   //   alert('display accomodation layer');
   // };
 
-
   let x = currentX;
   let y = currentY;
 
-console.log('Coordinates of point of focus:')
-console.log(x + ':' + y);
+  console.log("Coordinates of point of focus:");
+  console.log(x + ":" + y);
 
   // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-  AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
+  AccomRequest(x - 0.1, y - 0.1, x + 0.1, y + 0.1);
 
-// console.log(geoResponse);
-
+  // console.log(geoResponse);
 });
-
 
 // AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
 
@@ -297,28 +287,26 @@ console.log(x + ':' + y);
 // // //     map.setPitch({
 
 // // //       pitch: 0 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 5) {
 // // //     map.setPitch({
 
 // // //       pitch: 20 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 10) {
 // // //     map.setPitch({
 
 // // //       pitch: 40 // Angle of cameraview
-  
+
 // // //   });
 // // //   } else if (currentZoom > 15) {
 // // //     map.setPitch({
 
 // // //       pitch: 60 // Angle of cameraview
-  
+
 // // //   });
 // // //   };
-
-
 
 // });

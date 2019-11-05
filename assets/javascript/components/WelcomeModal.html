@@ -29,15 +29,17 @@
     <ion-card-content>
       <ion-item>
         <ion-label position="floating">Find Places</ion-label>
-        <ion-input></ion-input>
+        <ion-input id="search-bar"></ion-input>
       </ion-item>
       <ion-button
+        id="search-btn"
         style="position: relative;margin-top: 1rem;"
         size="medium"
         color="light"
         >GO</ion-button
       >
       <ion-button
+        id="search-btn"
         style="position: relative;margin-top: 1rem;"
         size="medium"
         color="light"
@@ -46,3 +48,9 @@
     </ion-card-content>
   </ion-card>
 </div>
+
+<script>
+  $("#search-btn").on("click", function() {
+    console.log("hi");
+  });
+</script>
