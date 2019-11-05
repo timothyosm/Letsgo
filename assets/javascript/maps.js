@@ -66,18 +66,12 @@ map.on("load", function() {
 
 
 $(document).ready(function() {
+  
+  userCheck();
 
-  let word = UUID + "/locations";
+  database.ref(`${UUID}/locations`).on("value", function(snapshotB) {
 
-  database.ref(word).on(
-    "value",
-    function(snapshot) {
-      const data = snapshot.val();
-
-      // if (data == null) {
-      //     alert (' we are null ')
-      //     idCounter == 0;
-      // } else {
+      const data = snapshotB.val();
 
       // clear all markers
       for (let i = 0; i < locations.length; i++) {
@@ -104,17 +98,14 @@ $(document).ready(function() {
         idCounter = highestID;
       });
 
-      // };
-
       RedrawList();
       CenterMap();
     },
     function(errorObject) {
-      // Create Error Handling
 
+      // Create Error Handling
       console.log("Errors handled: " + ErrorObject.code);
-    }
-  );
+    });
 });
 
 // adds current location to locations array as object
