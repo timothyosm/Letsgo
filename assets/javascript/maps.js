@@ -64,8 +64,12 @@ map.on("load", function() {
   });
 });
 
+
 $(document).ready(function() {
-  database.ref("locations").on(
+
+  let word = UUID + "/locations";
+
+  database.ref(word).on(
     "value",
     function(snapshot) {
       const data = snapshot.val();
@@ -148,7 +152,7 @@ $("#add-marker").on("click", function() {
     console.log(locations);
 
     // send the data to firebase but not the marker
-    database.ref().set({
+    database.ref(UUID).set({
       locations: _(locations)
         .map(place => {
           return _.omit(place, ["marker"]);
@@ -228,7 +232,7 @@ $("body").on("click", ".remove-location", function() {
   console.log(locations);
 
   // send the data to firebase but not the marker
-  database.ref().set({
+  database.ref(UUID).set({
     locations: _(locations)
       .map(place => {
         return _.omit(place, ["marker"]);
@@ -275,14 +279,18 @@ $("#accom-button").on("click", function() {
   let x = currentX;
   let y = currentY;
 
-console.log('Coordinates of point of focus:')
-console.log(x + ':' + y);
+  if (x == 0 && y == 0){
+    alert('Please give us an idea of where you want to stay!');
+  } else {
 
-  // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-  AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
+    console.log('Coordinates of point of focus:')
+    console.log(x + ':' + y);
 
-// console.log(geoResponse);
+    // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
+    AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
 
+  // console.log(geoResponse);
+  };
 });
 
 
