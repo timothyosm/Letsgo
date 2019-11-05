@@ -1,3 +1,5 @@
+idMarker = 0;
+
 function AccomRequest(LatBLi, LonBLi, LatTRi, LonTRi) {
         
     let LatBL = LatBLi;
@@ -7,6 +9,34 @@ function AccomRequest(LatBLi, LonBLi, LatTRi, LonTRi) {
    
     console.log('LatBL, LatTR, LonBL, LonTR:');
    console.log(`${LatBL},${LatTR},${LonBL},${LonTR}`);
+
+// testing bounding box
+
+
+
+// adds current location to locations array as object
+function addBBmarker(idMarker, x, y) {
+    return {
+      id: idMarker,
+      x: x,
+      y: y,
+      marker: new mapboxgl.Marker().setLngLat([x, y]).addTo(map)
+    };
+  }
+
+    // push location to array
+    idMarker++;
+    // push everything including marker to locations array
+    locations.push(addBBmarker(idMarker, LatBL, LonBL));
+    idMarker++;
+    locations.push(addBBmarker(idMarker, LatTR, LonTR));
+  
+
+
+
+
+
+
 
     //map api keys
     //required
