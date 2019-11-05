@@ -1,45 +1,41 @@
 <link href="./assets/css/mapstyle.css" rel="stylesheet" />
-<script src="./assets/javascript/maps.js"></script>
-<script src="./assets/javascript/hotels.js"></script>
 
-<body>
-  <div class="flex-parent card viewport-full relative scroll-hidden">
+<div class="flex-parent card viewport-full relative scroll-hidden">
+  <div
+    class="flex-child card-head flex-child--grow bg-darken10 viewport-half "
+    id="map"
+  >
     <div
-      class="flex-child card-head flex-child--grow bg-darken10 viewport-half "
-      id="map"
+      style="height: 60px; width: 60px; position:absolute; z-index:100; display: none;"
+      id="scope-div"
     >
-      <div
-        style="height: 60px; width: 60px; position:absolute; z-index:100; display: none;"
-        id="scope-div"
-      >
-        <img
-          src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png"
-        />
-      </div>
+      <img
+        src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png"
+      />
     </div>
+  </div>
 
-    <div class="card-body scroll-styled scroll-auto h120 pb-2">
-      <div class="card-title">
-        <input
-          type="button"
-          id="add-marker"
-          class="btn-dark"
-          value="Add Location"
-        /><input
-          type="button"
-          id="center-button"
-          class="btn-dark"
-          value="Centre Map"
-        /><input
+  <div class="card-body scroll-styled scroll-auto h120 pb-2">
+    <div class="card-title">
+      <input
+        type="button"
+        id="add-marker"
+        class="btn-dark"
+        value="Add Location"
+      /><input
+        type="button"
+        id="center-button"
+        class="btn-dark"
+        value="Centre Map"
+      /><input
         type="button"
         id="accom-button"
         class="btn-dark"
         value="Show Accomodation"
       />
-      </div>
-      <div class="scroll-styled scroll-auto h120">
-        <div id="location-list"></div>
-      </div>
+    </div>
+    <div class="scroll-styled scroll-auto h120">
+      <div id="location-list"></div>
     </div>
   </div>
-</body>
+</div>
