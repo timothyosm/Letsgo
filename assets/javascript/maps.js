@@ -104,10 +104,29 @@ function RedrawList() {
 
   for (let i = 0; i < locations.length; i++) {
     $("#location-list").append(`
-        ${locations[i].name} <input type="button" class="remove-location btn-dark" value="X" data-number="${locations[i].id}">
-        <input type="button" class="zoom-location btn-dark" value="O" data-number="${locations[i].id}"><br>
-        <h6>${locations[i].address}<br>
-        X: ${locations[i].x} Y:${locations[i].y}</h6>
+
+
+
+    <ion-app>
+    <ion-header translucent>
+      <ion-toolbar>
+        <ion-title> ${locations[i].name} </ion-title>
+      </ion-toolbar>
+    </ion-header>,
+    <ion-content fullscreen>
+      <ion-card>
+          <ion-card-header>
+          <ion-card-subtitle>Destination</ion-card-subtitle>
+          <ion-card-title>${locations[i].address}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+        <ion-icon class="remove-location" name="trash" data-number="${locations[i].id}"></ion-icon>
+        <ion-icon lass="zoom-location" name="search" data-number="${locations[i].id}></ion-icon>
+        <h6> X: ${locations[i].x} Y:${locations[i].y}</h6>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </ion-app>
         `);
   }
 }
