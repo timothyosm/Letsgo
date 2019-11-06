@@ -85,3 +85,56 @@ function addBBmarker(idMarker, x, y) {
 
 
 };
+
+
+
+// ajax({
+
+//     method: "GET",
+    
+//     url: "https://developers.zomato.com/ap...",
+    
+//     headers: {
+    
+//     "user-key": "b8cc3b8b0a85afed047f030fb52dc15f",
+    
+//     "content-type": "application/json"
+    
+//     }
+    
+//     })
+    
+//     .then(response => {
+    
+//     console.log(response.data.restaurants[0].http://restaurant.name);
+    
+//     })
+    
+    // .catch(error => {
+    
+    // console.log(error);
+    
+    // });
+
+function food (x, y) {
+    
+    $.ajax({
+        url: `https://developers.zomato.com/api/v2.1/geocode?lat=${x}&lon=${y}`,
+        method: "GET",
+        headers: {
+    
+            "user-key": "bcda4dbfad87daa44b7690ccebd778db",
+            
+            "content-type": "application/json"
+            
+            }
+      }).then(function(asd) {
+          console.log(asd);
+
+      }).catch(error => {
+    
+        console.log(error);
+        
+        });
+
+    };
