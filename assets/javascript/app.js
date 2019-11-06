@@ -8,6 +8,8 @@ let currentY = 0;
 let UUID;
 let idInurl;
 
+let search;
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
