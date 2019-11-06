@@ -4,7 +4,7 @@ mapboxgl.accessToken =
 var map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/light-v10",
-  logoPosition: "bottom-right",
+  logoPosition: "top-left",
   center: [30, 7],
   zoom: 0.9,
   pitch: 0,
@@ -44,43 +44,6 @@ $(document).ready(function() {
   
   userCheck();
 
-  // database.ref(`${UUID}/locations`).on("value", function(snapshotB) {
-  //   console.log('reloadedMaps');
-  //     const data2 = snapshotB.val();
-
-  //     // clear all markers
-  //     for (let i = 0; i < locations.length; i++) {
-  //       locations[i].marker.remove();
-  //     }
-
-  //     // clear locations array
-  //     locations = [];
-
-  //     // repopulate array with full object including marker which also redraws markers
-  //     _.forEach(data2, element => {
-  //       locations.push(
-  //         addLocation(
-  //           element.id,
-  //           element.name,
-  //           element.address,
-  //           element.x,
-  //           element.y
-  //         )
-  //       );
-
-  //       highestID = 0;
-  //       if (element.id > highestID) highestID = element.id;
-  //       idCounter = highestID;
-  //     });
-
-  //     RedrawList();
-  //     CenterMap();
-  //   },
-  //   function(errorObject) {
-
-  //     // Create Error Handling
-  //     console.log("Errors handled: " + ErrorObject.code);
-  //   });
 });
 
 // adds current location to locations array as object

@@ -5,6 +5,9 @@ let idCounter = 0;
 let currentX = 0;
 let currentY = 0;
 
+let UUID;
+let idInurl;
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",

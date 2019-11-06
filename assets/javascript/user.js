@@ -1,72 +1,77 @@
-let UUID;
-let idInurl;
 
 function userCheck() {
+
   let url = window.location.href;
   idInurl = url.substr(url.length - 6);
 
-  
   
   rootRef = firebase.database().ref()
   rootRef.child(idInurl).once("value", snapshot => {
       
   let a = snapshot.val();
 
+  // no UUID exists
   if (a == null) {
 
       UUID = create_UUID();
       console.log('Created UUID');
       console.log(UUID);
-  }
 
-  else {
+  } else {
+
+    // UUID exists!
       UUID = idInurl;
+      console.log('existing UUID');
+      console.log(UUID);
+    };
 
-      database.ref(UUID).on(
-          "value",
-          function(snapshot) {
-            const data = snapshot.val().locations;
-              console.log('reloadedUsers');
-            // clear all markers
-            for (let i = 0; i < locations.length; i++) {
-              locations[i].marker.remove();
-            }
-      
-            // clear locations array
-            locations = [];
-      
-            // repopulate array with full object including marker which also redraws markers
-            _.forEach(data, element => {
-              locations.push(
-                addLocation(
-                  element.id,
-                  element.name,
-                  element.address,
-                  element.x,
-                  element.y
-                )
-              );
-      
-              highestID = 0;
-              if (element.id > highestID) highestID = element.id;
-              idCounter = highestID;
-            });
-      
-            RedrawList();
-            CenterMap();
+    
+    $("#unique-code").html(`<a href=".#${UUID}" target="_blank">#${UUID}</a>`)
+
+      database.ref(`${UUID}/locations`).on("value", function(snapshot2) {
+
+              const dataRef = snapshot2.val();
+
+                console.log('reloadedUsers');
+              // clear all markers
+              for (let i = 0; i < locations.length; i++) {
+                locations[i].marker.remove();
+              }
+        
+              // clear locations array
+              locations = [];
+        
+              // repopulate array with full object including marker which also redraws markers
+              _.forEach(dataRef, element => {
+                locations.push(
+                  addLocation(
+                    element.id,
+                    element.name,
+                    element.address,
+                    element.x,
+                    element.y
+                  )
+                );
+        
+                highestID = 0;
+                if (element.id > highestID) highestID = element.id;
+                idCounter = highestID;
+              });
+        
+              RedrawList();
+              CenterMap();
+            
           },
           function(errorObject) {
             
             // Create Error Handling
-            console.log("Errors handled: " + ErrorObject.code);
-          }
-        );
+  
+            
+            console.log(ErrorObject);
 
-      console.log('existing UUID');
-      console.log(UUID);
-  }
+          });
+  
   })
-
 
 
 function create_UUID() {
