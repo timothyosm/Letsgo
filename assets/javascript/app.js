@@ -87,6 +87,5 @@ function chatPage() {
 }
 
 $(document).ready(function() {
-  navPage();
   homePage();
 });
