@@ -32,14 +32,14 @@
         <ion-input id="search-bar"></ion-input>
       </ion-item>
       <ion-button
-        id="search-btn"
+        id="search-btn1"
         style="position: relative;margin-top: 1rem;"
         size="medium"
         color="light"
         >GO</ion-button
       >
       <ion-button
-        id="search-btn"
+        id="search-btn2"
         style="position: relative;margin-top: 1rem;"
         size="medium"
         color="light"
@@ -50,8 +50,13 @@
 </div>
 
 <script>
-  $("#search-btn").on("click", function() {
+  $("#search-btn1").on("click", function() {
     search = $("#search-bar").val();
     navPage();
+  });
+
+  $("#search-btn2").on("click", function() {
+    let random = chance.country({ full: true });
+    $("#search-bar").val(random);
   });
 </script>
