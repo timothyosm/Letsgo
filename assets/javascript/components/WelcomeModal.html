@@ -3,7 +3,16 @@
   rel="stylesheet"
 />
 
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
 <style>
+
+.ion-toolbar {
+  padding-top: 0px;
+}
+  div {
+    font-family: 'Roboto Condensed', sans-serif;
+  }
   ._welcome_modal_card {
     position: absolute;
     top: 40%;
@@ -14,11 +23,17 @@
 
   ._welcome_modal_card ion-card {
     background: white;
-    font-family: "Arvo", serif;
+    /* font-family: "Arvo", serif; */
   }
+
+  @media only screen and (min-width: 1280px) {
+  #welcome {
+    width: 33%;
+  }
+}
 </style>
 
-<div class="_welcome_modal_card">
+<div id = "welcome" class="_welcome_modal_card">
   <ion-card class="animation-fade-in">
     <ion-card-header>
       <ion-card-title style="text-align: center; font-size: 1.5rem;">
@@ -28,7 +43,7 @@
 
     <ion-card-content>
       <ion-item>
-        <ion-label position="floating">Find Places</ion-label>
+        <ion-label position="floating">Where to first?</ion-label>
         <ion-input id="search-bar"></ion-input>
       </ion-item>
       <ion-button
