@@ -23,9 +23,9 @@ var geocoder = new MapboxGeocoder({
 
 map.addControl(geocoder, "bottom-left");
 
-map.on("load", function() {
+map.on("load", function () {
   // Listen for the `geocoder.input` event that is triggered when a user makes a search
-  geocoder.on("result", function(ev) {
+  geocoder.on("result", function (ev) {
     geoResponse = ev.result;
     currentX = geoResponse.geometry.coordinates[0];
     currentY = geoResponse.geometry.coordinates[1];
@@ -40,8 +40,8 @@ map.on("load", function() {
 });
 
 
-$(document).ready(function() {
-  
+$(document).ready(function () {
+
   userCheck();
 
 });
@@ -58,7 +58,7 @@ function addLocation(idCounter, name, address, x, y) {
   };
 }
 
-$("#add-marker").on("click", function() {
+$("#add-marker").on("click", function () {
   if (geoResponse == undefined) {
     $("#location-list").append(
       "Search for a building, street or landmark first!"
@@ -89,12 +89,12 @@ $("#add-marker").on("click", function() {
         .value()
     });
 
-   
+
   }
 });
 
 // center button onclick listener
-$("#center-button").on("click", function() {
+$("#center-button").on("click", function () {
   CenterMap();
 });
 
@@ -104,31 +104,27 @@ function RedrawList() {
 
   for (let i = 0; i < locations.length; i++) {
     $("#location-list").append(`
+    <ion-card>
+    <ion-card-header>
+        <ion-card-subtitle></ion-card-subtitle>
+        <ion-card-title>${locations[i].name}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        ${locations[i].address}
+    </ion-card-content>
+    <ion-item>
+        <ion-button class="zoom-location" color="dark" data-number="${locations[i].id}">Go To</ion-button>
+        <ion-button class="remove-location" color="dark" data-number="${locations[i].id}">Delete</ion-button>
+        <ion-button class="Add-event" color="dark" data-number="${locations[i].id}">Add Event</ion-button>
+    </ion-item>
+</ion-card>
 
-
-
-    <ion-app>
-    <ion-header translucent>
-      <ion-toolbar>
-        <ion-title> ${locations[i].name} </ion-title>
-      </ion-toolbar>
-    </ion-header>,
-    <ion-content fullscreen>
-      <ion-card>
-          <ion-card-header>
-          <ion-card-subtitle>Destination</ion-card-subtitle>
-          <ion-card-title>${locations[i].address}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-        <ion-icon class="remove-location" name="trash" data-number="${locations[i].id}"></ion-icon>
-        <ion-icon lass="zoom-location" name="search" data-number="${locations[i].id}></ion-icon>
-        <h6> X: ${locations[i].x} Y:${locations[i].y}</h6>
-        </ion-card-content>
-      </ion-card>
-    </ion-content>
-  </ion-app>
         `);
+  console.log("Y:" + locations[i].y);
+  console.log("X:" + locations[i].x);
+
   }
+
 }
 
 function CenterMap() {
@@ -141,7 +137,7 @@ function CenterMap() {
       coordinates.push(arrToPush);
     }
 
-    var bounds = coordinates.reduce(function(bounds, coord) {
+    var bounds = coordinates.reduce(function (bounds, coord) {
       return bounds.extend(coord);
     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
@@ -165,7 +161,7 @@ function CenterMap() {
 
 // remove location click listener
 
-$("body").on("click", ".remove-location", function() {
+$("body").on("click", ".remove-location", function () {
   keyToRemove = $(this).attr("data-number");
 
   for (let i = 0; i < locations.length; i++) {
@@ -190,7 +186,7 @@ $("body").on("click", ".remove-location", function() {
 
 });
 
-$("body").on("click", ".zoom-location", function() {
+$("body").on("click", ".zoom-location", function () {
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
@@ -206,7 +202,7 @@ $("body").on("click", ".zoom-location", function() {
 });
 
 // accomodation button onclick listener
-$("#accom-button").on("click", function() {
+$("#accom-button").on("click", function () {
   // let zoomLevel = map.getZoom();
   // alert(zoomLevel);
   // if (zoomLevel < 10) {
@@ -219,7 +215,7 @@ $("#accom-button").on("click", function() {
   let y = currentY;
 
 
-  if (x == 0 && y == 0){
+  if (x == 0 && y == 0) {
     alert('Please give us an idea of where you want to stay!');
   } else {
 
@@ -227,9 +223,9 @@ $("#accom-button").on("click", function() {
     console.log(x + ':' + y);
 
     // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-    AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
+    AccomRequest((x - .1), (y - .1), (x + .1), (y + .1));
 
-  // console.log(geoResponse);
+    // console.log(geoResponse);
   };
 
 });

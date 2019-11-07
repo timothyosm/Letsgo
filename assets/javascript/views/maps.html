@@ -14,12 +14,32 @@
 
   <div class="card-body scroll-styled scroll-auto h120 pb-2">
     <div class="card-title">
-      <input type="button" id="add-marker" class="btn-dark" value="Add Location" /><input type="button"
-        id="center-button" class="btn-dark" value="Centre Map" /><input type="button" id="accom-button" class="btn-dark"
-        value="Show Accomodation" /><input type="button" id="food-button" class="btn-dark" value="Show Food" />
-      <div id="unique-code"></div>
+      <!-- <input type="button" id="add-marker" class="btn-dark" value="Add Location" />
+      <input type="button" id="center-button" class="btn-dark" value="Centre Map" />
+      <input type="button" id="accom-button" class="btn-dark" value="Show Accomodation" />
+      <input type="button" id="food-button" class="btn-dark" value="Show Food" /> -->
+      <ion-button type="button" id="add-marker" color="dark" value="Add Location">
+        <ion-icon name="checkmark" value="Add Location"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="center-button" color="dark" value="Centre Map">
+        <ion-icon name="locate"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="accom-button" color="dark" value="Show Accomodation">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="food-button" color="dark" value="Show Food">
+        <ion-icon name="pizza"></ion-icon>
+      </ion-button>
+
+      <div></div>
+
+      <ion-button color="dark" id="unique-code">  <ion-icon name="clipboard"></ion-icon>
+
+        </ion-button>
     </div>
-    <div class="scroll-styled scroll-auto h120">
+    <!-- <div class="scroll-styled scroll-auto h120"> -->
+    <div>
+
       <div id="location-list"></div>
     </div>
   </div>
