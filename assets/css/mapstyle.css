@@ -1,30 +1,32 @@
-        body {
-            margin:0;
-            padding:0;
-        }
-        h6 {
-            font-size: 10px;
-            color: rgb(83, 83, 83);
-        }
-        .side-bar {
-            padding: 10px 10px 10px 10px; 
-            width: 255px;
+body {
+  margin: 0;
+  padding: 0;
+}
+h6 {
+  font-size: 10px;
+  color: rgb(83, 83, 83);
+}
+.side-bar {
+  padding: 10px 10px 10px 10px;
+  width: 255px;
+}
+.btn-dark {
+  height: 37px;
+  margin: 0px 10px 10px 0px;
+}
+.remove-location {
+  float: right;
+}
+.zoom-location {
+  float: right;
+}
+#unique-code {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
 
-        }
-        .btn-dark {
-            height: 37px;
-            margin: 0px 10px 10px 0px;
-        }
-        .remove-location {
-            float: right;
-        }
-        .zoom-location {
-            float: right;
-        }
-        #unique-code {
-            position: absolute;
-            top:20px;
-            right: 20px;
-        }
-
-        
+.mapboxgl-popup-content {
+  padding: 0px;
+  width: 300px;
+}
