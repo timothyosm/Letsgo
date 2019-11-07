@@ -1,9 +1,10 @@
-<link href="./assets/css/mapstyle.css" rel="stylesheet" />
+<head>
+  <link href="./assets/css/mapstyle.css" rel="stylesheet" />
+  <script src="./assets/javascript/maps.js"></script>
+  <script src="./assets/javascript/hotels.js"></script>
+  <script src="./assets/javascript/user.js"></script>
 
-<script src="./assets/javascript/maps.js"></script>
-<script src="./assets/javascript/hotels.js"></script>
-<script src="./assets/javascript/user.js"></script>
-
+</head>
 
 <div class="flex-parent card viewport-full relative scroll-hidden">
   <div class="flex-child card-head flex-child--grow bg-darken10 viewport-half " id="map">
@@ -30,12 +31,38 @@
       <ion-button type="button" id="food-button" color="dark" value="Show Food">
         <ion-icon name="pizza"></ion-icon>
       </ion-button>
+      <ion-button color="dark">
+        <ion-input type="text" name="firstdate">
+          <ion-icon name="calendar"></ion-icon>
+        </ion-input>
+      </ion-button>
+
+
+      <script>
+        $(function () {
+          $('input[name="firstdate"]').daterangepicker({
+            "singleDatePicker": true,
+            "autoApply": true,
+            "startDate": "11/01/2019",
+            "endDate": "11/07/2019",
+            "drops": "up",
+            "buttonClasses": "ion-button",
+            "applyButtonClasses": "ion-button",
+            "cancelClass": "ion-button"
+          }, function (start) {
+            console.log(start.format());
+            database.ref(UUID).set({
+              firstDate: start.format()
+            });
+          });
+        });
+      </script>
 
       <div></div>
 
-      <ion-button color="dark" id="unique-code">  <ion-icon name="clipboard"></ion-icon>
+      <ion-button color="dark" id="unique-code">
 
-        </ion-button>
+      </ion-button>
     </div>
     <!-- <div class="scroll-styled scroll-auto h120"> -->
     <div>
