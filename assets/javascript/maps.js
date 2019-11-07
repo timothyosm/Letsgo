@@ -14,18 +14,18 @@ var map = new mapboxgl.Map({
 // search input box
 var geocoder = new MapboxGeocoder({
   accessToken: mapboxgl.accessToken,
-  // anchor: 'center',
-
   placeholder: "Where to?",
   marker: false,
   mapboxgl: mapboxgl
 });
 
-map.addControl(geocoder, "bottom-left");
+// map.addControl(geocoder, "bottom-left");
 
 map.on("load", function () {
   // Listen for the `geocoder.input` event that is triggered when a user makes a search
+
   geocoder.on("result", function (ev) {
+
     geoResponse = ev.result;
     currentX = geoResponse.geometry.coordinates[0];
     currentY = geoResponse.geometry.coordinates[1];
@@ -36,11 +36,44 @@ map.on("load", function () {
     $("#scope-div").css("display", "block");
     // add marker to map
     new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
+
+
+    //hide splash screen
+    if (splashGone == false) {
+    
+    map.addControl(geocoder, "bottom-left");
+    splashGone = true;
+    let search = geoResponse.place_name;
+    
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
+
+    $("._welcome_modal_card").css('display', 'none');
+    }
+
+
   });
+
+  
+
 });
 
 
+
+document.addEventListener("DOMContentLoaded", async event => {
+
+
   userCheck();
+
+  $("#search-bar-div").append(geocoder.onAdd(map));
+ 
+  setTimeout(function(){ 
+    map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
+   }, 1000);
+  
+
+
+  userCheck();
+
 });
 
 // adds current location to locations array as object
@@ -269,5 +302,82 @@ $("#accom-button").on("click", function() {
 // // //   };
 
 // });
+
+
+
+
+$("#search-btn1").on("click", function() {
+  // search = $("#search-bar").val();
+  // navPage();
+
+  // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+     $("._welcome_modal_card").css('display', 'none');
+
+    //  let search = geoResponse.name;
+    //  $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
+    
+    splashGone = true;
+     map.addControl(geocoder, "bottom-left");
+});
+
+
+
+$("#search-btn2").on("click", function() {
+  
+
+  let random = chance.country({ full: true });
+  $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
+  
+  FlyToBBox(random);
+
+  map.addControl(geocoder, "bottom-left");
+  splashGone = true;
+
+  
+  $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
+
+  $("._welcome_modal_card").css('display', 'none');
+
+});
+
+
+function FlyToBBox(search) {
+    
+    $.ajax({
+        url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
+        method: "GET"
+
+      }).then(function(geoReply) {
+          console.log(geoReply.features[0].bbox[0]);
+
+          let fish = geoReply.features[0].geometry.coordinates;
+      
+          // map.flyTo({
+          //   center: fish,
+          //   zoom: 5
+          // });
+          
+          // let coordinates = [];
+          //  let arrToPush = [geoReply.features[0].bbox[0], geoReply.features[0].bbox[1]];
+          //  coordinates.push(arrToPush);
+          //   arrToPush = [geoReply.features[0].bbox[2], geoReply.features[0].bbox[3]];
+          //   coordinates.push(arrToPush);
+
+          // var bounds = coordinates.reduce(function(bounds, coord) {
+          //   return bounds.extend(coord);
+          // }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+      
+          map.fitBounds(geoReply.features[0].bbox, {
+            padding: 10
+          });
+
+
+      }).catch(error => {
+    
+        console.log(error);
+        
+        });
+
+    };
 
 

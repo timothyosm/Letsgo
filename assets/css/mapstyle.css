@@ -26,8 +26,30 @@ h6 {
   right: 20px;
 }
 
+
+        }
+        .btn-dark {
+            height: 37px;
+            margin: 0px 10px 10px 0px;
+        }
+        .remove-location {
+            float: right;
+        }
+        .zoom-location {
+            float: right;
+        }
+        #unique-code {
+            position: absolute;
+            top:20px;
+            right: 20px;
+        }
+        .mapboxgl-ctrl-geocoder { 
+            min-width:100%; 
+        }
+
 .mapboxgl-popup-content {
   padding: 0px;
   width: 300px;
 }
+
 

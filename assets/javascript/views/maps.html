@@ -4,6 +4,59 @@
   <script src="./assets/javascript/hotels.js"></script>
   <script src="./assets/javascript/user.js"></script>
 
+<link href="https://fonts.googleapis.com/css?family=Arvo&display=swap"rel="stylesheet"/>
+
+<style>
+  ._welcome_modal_card {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index:1;
+  }
+
+  ._welcome_modal_card ion-card {
+    background: white;
+    font-family: "Arvo", serif;
+    overflow: visible;
+  }
+  
+</style>
+
+<div class="_welcome_modal_card">
+    <ion-card class="animation-fade-in">
+      <ion-card-header>
+        <ion-card-title style="text-align: center; font-size: 1.5rem;">
+          Where Would You Like To Go Next ?
+        </ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+          <div id="search-bar-div"></div>
+        <!-- <ion-item>
+          <ion-label position="floating">Find Places</ion-label>
+          <ion-input id="search-bar"></ion-input>
+        </ion-item> -->
+        <ion-button
+          id="search-btn1"
+          style="position: relative;margin-top: 1rem;"
+          size="medium"
+          color="light"
+          >GO</ion-button
+        >
+        <ion-button
+          id="search-btn2"
+          style="position: relative;margin-top: 1rem;"
+          size="medium"
+          color="light"
+          >I'm Feeling Lucky</ion-button
+        >
+        
+      </ion-card-content>
+    </ion-card>
+  </div>
+
 </head>
 
 <div class="flex-parent card viewport-full relative scroll-hidden">
@@ -12,7 +65,7 @@
       <img src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png" />
     </div>
   </div>
-
+  
   <div class="card-body scroll-styled scroll-auto h120 pb-2">
     <div class="card-title">
       <!-- <input type="button" id="add-marker" class="btn-dark" value="Add Location" />
