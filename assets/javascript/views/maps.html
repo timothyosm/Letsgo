@@ -1,52 +1,74 @@
-<link href="./assets/css/mapstyle.css" rel="stylesheet" />
+<head>
+  <link href="./assets/css/mapstyle.css" rel="stylesheet" />
+  <script src="./assets/javascript/maps.js"></script>
+  <script src="./assets/javascript/hotels.js"></script>
+  <script src="./assets/javascript/user.js"></script>
 
-<script src="./assets/javascript/maps.js"></script>
-<script src="./assets/javascript/hotels.js"></script>
-<script src="./assets/javascript/user.js"></script>
-
+</head>
 
 <div class="flex-parent card viewport-full relative scroll-hidden">
-  <div
-    class="flex-child card-head flex-child--grow bg-darken10 viewport-half "
-    id="map"
-  >
-    <div
-      style="height: 60px; width: 60px; position:absolute; z-index:100; display: none;"
-      id="scope-div"
-    >
-      <img
-        src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png"
-      />
+  <div class="flex-child card-head flex-child--grow bg-darken10 viewport-half " id="map">
+    <div style="height: 60px; width: 60px; position:absolute; z-index:100; display: none;" id="scope-div">
+      <img src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png" />
     </div>
   </div>
 
   <div class="card-body scroll-styled scroll-auto h120 pb-2">
     <div class="card-title">
-      <input
-        type="button"
-        id="add-marker"
-        class="btn-dark"
-        value="Add Location"
-      /><input
-        type="button"
-        id="center-button"
-        class="btn-dark"
-        value="Centre Map"
-      /><input
-        type="button"
-        id="accom-button"
-        class="btn-dark"
-        value="Show Accomodation"
-      /><input
-      type="button"
-      id="food-button"
-      class="btn-dark"
-      value="Show Food"
-    /><div id="unique-code"></div>
-      </div>
-      <div class="scroll-styled scroll-auto h120">
-        <div id="location-list"></div>
-      </div>
+      <!-- <input type="button" id="add-marker" class="btn-dark" value="Add Location" />
+      <input type="button" id="center-button" class="btn-dark" value="Centre Map" />
+      <input type="button" id="accom-button" class="btn-dark" value="Show Accomodation" />
+      <input type="button" id="food-button" class="btn-dark" value="Show Food" /> -->
+      <ion-button type="button" id="add-marker" color="dark" value="Add Location">
+        <ion-icon name="checkmark" value="Add Location"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="center-button" color="dark" value="Centre Map">
+        <ion-icon name="locate"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="accom-button" color="dark" value="Show Accomodation">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="food-button" color="dark" value="Show Food">
+        <ion-icon name="pizza"></ion-icon>
+      </ion-button>
+      <ion-button color="dark">
+        <ion-input type="text" name="firstdate">
+          <ion-icon name="calendar"></ion-icon>
+        </ion-input>
+      </ion-button>
+
+
+      <script>
+        $(function () {
+          $('input[name="firstdate"]').daterangepicker({
+            "singleDatePicker": true,
+            "autoApply": true,
+            "startDate": "11/01/2019",
+            "endDate": "11/07/2019",
+            "drops": "up",
+            "buttonClasses": "ion-button",
+            "applyButtonClasses": "ion-button",
+            "cancelClass": "ion-button"
+          }, function (start) {
+            console.log(start.format());
+            database.ref(UUID).set({
+              firstDate: start.format()
+            });
+          });
+        });
+      </script>
+
+      <div></div>
+
+      <ion-button color="dark" id="unique-code">
+
+      </ion-button>
+    </div>
+    <!-- <div class="scroll-styled scroll-auto h120"> -->
+    <div>
+
+      <div id="location-list"></div>
     </div>
   </div>
+</div>
 </div>
