@@ -57,6 +57,7 @@ function addBBmarker(idMarker, x, y) {
     let order_by = "popularity";
 
     //api query
+${variable}
 
     var settings = {
         "async": true,

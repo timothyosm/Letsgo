@@ -7,7 +7,8 @@ function userCheck() {
   
   rootRef = firebase.database().ref()
   rootRef.child(idInurl).once("value", snapshot => {
-      
+
+    map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
   let a = snapshot.val();
 
   // no UUID exists
@@ -29,6 +30,7 @@ function userCheck() {
     $("#unique-code").html(`<a href=".#${UUID}" target="_blank">#${UUID}</a>`)
 
       database.ref(`${UUID}/locations`).on("value", function(snapshot2) {
+        
 
               const dataRef = snapshot2.val();
 

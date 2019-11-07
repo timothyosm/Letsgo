@@ -26,5 +26,6 @@
             top:20px;
             right: 20px;
         }
-
-        
+        .mapboxgl-ctrl-geocoder { 
+            min-width:100%; 
+        }
