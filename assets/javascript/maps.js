@@ -40,10 +40,7 @@ map.on("load", function () {
 });
 
 
-$(document).ready(function () {
-
   userCheck();
-
 });
 
 // adds current location to locations array as object
@@ -88,7 +85,6 @@ $("#add-marker").on("click", function () {
         })
         .value()
     });
-
 
   }
 });
@@ -182,8 +178,6 @@ $("body").on("click", ".remove-location", function () {
       })
       .value()
   });
-
-
 });
 
 $("body").on("click", ".zoom-location", function () {
@@ -202,7 +196,7 @@ $("body").on("click", ".zoom-location", function () {
 });
 
 // accomodation button onclick listener
-$("#accom-button").on("click", function () {
+$("#accom-button").on("click", function() {
   // let zoomLevel = map.getZoom();
   // alert(zoomLevel);
   // if (zoomLevel < 10) {
@@ -214,20 +208,17 @@ $("#accom-button").on("click", function () {
   let x = currentX;
   let y = currentY;
 
-
   if (x == 0 && y == 0) {
-    alert('Please give us an idea of where you want to stay!');
+    alert("Please give us an idea of where you want to stay!");
   } else {
-
-    console.log('Coordinates of point of focus:')
-    console.log(x + ':' + y);
+    console.log("Coordinates of point of focus:");
+    console.log(x + ":" + y);
 
     // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-    AccomRequest((x - .1), (y - .1), (x + .1), (y + .1));
+    AccomRequest();
 
     // console.log(geoResponse);
-  };
-
+  }
 });
 
 // // food button onclick listener
@@ -243,7 +234,6 @@ $("#accom-button").on("click", function () {
 //   };
 
 // });
-
 
 // AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
 
