@@ -31,7 +31,7 @@ function userCheck() {
       Url.focus();
       Url.select();  
       document.execCommand("Copy");
-      console.log(UUID)
+      console.log("copied")
     });
 
     database.ref(`${UUID}/locations`).on("value", function (snapshot2) {
