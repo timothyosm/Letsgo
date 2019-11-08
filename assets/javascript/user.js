@@ -28,12 +28,8 @@ function userCheck() {
       console.log(UUID);
     };
 
-    
-    
+       
     $("#unique-code").html(`<a href=".#${UUID}" target="_blank">#${UUID}</a>`)
-
-
-  
 
     $("#unique-code").click(function () {
       var Url = document.getElementById("paste-box");
@@ -48,7 +44,7 @@ function userCheck() {
 
       const dataRef = snapshot2.val();
 
-      console.log('reloadedUsers');
+      console.log('Reloaded firebase UUID/locations');
       // clear all markers
       for (let i = 0; i < locations.length; i++) {
         locations[i].marker.remove();
