@@ -13,7 +13,7 @@ let idInurl;
 let search;
 
 // Your web app's Firebase configuration
-let firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
   authDomain: "projectone-f20d7.firebaseapp.com",
   databaseURL: "https://projectone-f20d7.firebaseio.com",
