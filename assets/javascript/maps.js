@@ -64,11 +64,6 @@ document.addEventListener("DOMContentLoaded", async event => {
 
   $("#search-bar-div").append(geocoder.onAdd(map));
  
-  setTimeout(function(){ 
-    map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
-   }, 1000);
-  
-
 });
 
 // adds current location to locations array as object
