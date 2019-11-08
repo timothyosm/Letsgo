@@ -8,10 +8,7 @@ function userCheck() {
   rootRef = firebase.database().ref()
   rootRef.child(idInurl).once("value", snapshot => {
 
-
     map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
-  let a = snapshot.val();
-
 
     let a = snapshot.val();
 

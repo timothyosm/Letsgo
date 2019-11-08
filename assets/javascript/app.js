@@ -57,19 +57,6 @@ function navPage() {
     .then(response => {
       $(".content").html(response);
       toggleLoadingScreen("hide");
-
-      // e = $.Event(`keyup`);
-      // e.keyCode = 32;
-      
-      // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-      // $(".mapboxgl-ctrl-geocoder--input").trigger(e);
-
-      e = $.Event(`keyup`);
-      e.keyCode = 32;
-
-      // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-      $(".mapboxgl-ctrl-geocoder--input").trigger(e);
-
     })
     .catch(error => console.error(error));
 }
