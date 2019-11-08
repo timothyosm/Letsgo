@@ -54,8 +54,12 @@ map.on("load", function () {
 
 
 $(document).ready(function() {
+
+
   $("#search-bar-div").append(geocoder.onAdd(map));
   userCheck();
+
+
 
   
 });
@@ -249,27 +253,25 @@ $("#accom-button").on("click", function() {
 
 $("#search-btn1").on("click", function() {
 
-  // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
-     $("._welcome_modal_card").css('display', 'none');
-
+  
+  let searchbox = $(".mapboxgl-ctrl-geocoder--input").val();
+  
+  FlyToBBox(searchbox);
+  $("._welcome_modal_card").css('display', 'none');
     splashGone = true;
      map.addControl(geocoder, "bottom-left");
+     $(".mapboxgl-ctrl-geocoder--input").attr("value", searchbox);
 });
-
 
 
 $("#search-btn2").on("click", function() {
 
   let random = chance.country({ full: true });
   $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
-  
   FlyToBBox(random);
-
   map.addControl(geocoder, "bottom-left");
   splashGone = true;
-  
   $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
-
   $("._welcome_modal_card").css('display', 'none');
 
 });
@@ -282,7 +284,6 @@ function FlyToBBox(search) {
         method: "GET"
       }).then(function(geoReply) {
           console.log(geoReply.features[0].bbox[0]);
-
           map.fitBounds(geoReply.features[0].bbox, {
             padding: 10
           });
