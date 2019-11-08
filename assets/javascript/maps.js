@@ -53,11 +53,11 @@ map.on("load", function () {
 
 
 
-document.addEventListener("DOMContentLoaded", async event => {
-
+$(document).ready(function() {
+  $("#search-bar-div").append(geocoder.onAdd(map));
   userCheck();
 
-  $("#search-bar-div").append(geocoder.onAdd(map));
+  
 });
 
 // adds current location to locations array as object
