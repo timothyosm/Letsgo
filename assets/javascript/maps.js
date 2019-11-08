@@ -48,7 +48,6 @@ map.on("load", function () {
 
     $("._welcome_modal_card").css('display', 'none');
     }
-
   });
 });
 
@@ -56,11 +55,9 @@ map.on("load", function () {
 
 document.addEventListener("DOMContentLoaded", async event => {
 
-
   userCheck();
 
   $("#search-bar-div").append(geocoder.onAdd(map));
-  map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
 });
 
 // adds current location to locations array as object

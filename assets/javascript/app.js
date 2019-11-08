@@ -13,7 +13,7 @@ let idInurl;
 let search;
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
+let firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
   authDomain: "projectone-f20d7.firebaseapp.com",
   databaseURL: "https://projectone-f20d7.firebaseio.com",
@@ -57,19 +57,6 @@ function navPage() {
     .then(response => {
       $(".content").html(response);
       toggleLoadingScreen("hide");
-
-      // e = $.Event(`keyup`);
-      // e.keyCode = 32;
-      
-      // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-      // $(".mapboxgl-ctrl-geocoder--input").trigger(e);
-
-      e = $.Event(`keyup`);
-      e.keyCode = 32;
-
-      // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-      $(".mapboxgl-ctrl-geocoder--input").trigger(e);
-
     })
     .catch(error => console.error(error));
 }
