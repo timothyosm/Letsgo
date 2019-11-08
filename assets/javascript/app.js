@@ -10,6 +10,8 @@ let currentY = 0;
 let UUID;
 let idInurl;
 
+let search;
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
@@ -48,18 +50,26 @@ function homePage() {
 }
 
 function navPage() {
-  $("#pageTitle").html(`<ion-title>Navigation Page</ion-title>`);
+    $("#pageTitle").html(`<ion-title>Navigation Page</ion-title>`);
   document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
   $.ajax("./assets/javascript/views/maps.html")
     .then(response => {
       $(".content").html(response);
       toggleLoadingScreen("hide");
+
       // e = $.Event(`keyup`);
       // e.keyCode = 32;
       
       // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
       // $(".mapboxgl-ctrl-geocoder--input").trigger(e);
+
+      e = $.Event(`keyup`);
+      e.keyCode = 32;
+
+      // $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
+      $(".mapboxgl-ctrl-geocoder--input").trigger(e);
+
     })
     .catch(error => console.error(error));
 }
@@ -68,7 +78,7 @@ function itePage() {
   $("#pageTitle").html(`<ion-title>Itinerary Page</ion-title>`);
   document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
-  $.ajax("./assets/HTMLPages/construction.html")
+  $.ajax("./assets/HTMLPages/itinerary.html")
     .then(response => {
       $(".content").html(response);
       toggleLoadingScreen("hide");

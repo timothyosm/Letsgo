@@ -21,9 +21,10 @@ var geocoder = new MapboxGeocoder({
 
 // map.addControl(geocoder, "bottom-left");
 
-map.on("load", function() {
+map.on("load", function () {
   // Listen for the `geocoder.input` event that is triggered when a user makes a search
-  geocoder.on("result", function(ev) {
+
+  geocoder.on("result", function (ev) {
 
     geoResponse = ev.result;
     currentX = geoResponse.geometry.coordinates[0];
@@ -35,7 +36,6 @@ map.on("load", function() {
     $("#scope-div").css("display", "block");
     // add marker to map
     new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
-
 
     //hide splash screen
     if (splashGone == false) {
@@ -49,12 +49,9 @@ map.on("load", function() {
     $("._welcome_modal_card").css('display', 'none');
     }
 
-
   });
-
-  
-
 });
+
 
 
 document.addEventListener("DOMContentLoaded", async event => {
@@ -63,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async event => {
   userCheck();
 
   $("#search-bar-div").append(geocoder.onAdd(map));
- 
+  map.resize(); // using this to do a delayed resizing of the map to beat known mapbox size issue
 });
 
 // adds current location to locations array as object
@@ -78,7 +75,7 @@ function addLocation(idCounter, name, address, x, y) {
   };
 }
 
-$("#add-marker").on("click", function() {
+$("#add-marker").on("click", function () {
   if (geoResponse == undefined) {
     $("#location-list").append(
       "Search for a building, street or landmark first!"
@@ -109,12 +106,11 @@ $("#add-marker").on("click", function() {
         .value()
     });
 
-   
   }
 });
 
 // center button onclick listener
-$("#center-button").on("click", function() {
+$("#center-button").on("click", function () {
   CenterMap();
 });
 
@@ -124,12 +120,27 @@ function RedrawList() {
 
   for (let i = 0; i < locations.length; i++) {
     $("#location-list").append(`
-        ${locations[i].name} <input type="button" class="remove-location btn-dark" value="X" data-number="${locations[i].id}">
-        <input type="button" class="zoom-location btn-dark" value="O" data-number="${locations[i].id}"><br>
-        <h6>${locations[i].address}<br>
-        X: ${locations[i].x} Y:${locations[i].y}</h6>
+    <ion-card>
+    <ion-card-header>
+        <ion-card-subtitle></ion-card-subtitle>
+        <ion-card-title>${locations[i].name}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        ${locations[i].address}
+    </ion-card-content>
+    <ion-item>
+        <ion-button class="zoom-location" color="dark" data-number="${locations[i].id}">Go To</ion-button>
+        <ion-button class="remove-location" color="dark" data-number="${locations[i].id}">Delete</ion-button>
+        <ion-button class="Add-event" color="dark" data-number="${locations[i].id}">Add Event</ion-button>
+    </ion-item>
+</ion-card>
+
         `);
+  console.log("Y:" + locations[i].y);
+  console.log("X:" + locations[i].x);
+
   }
+
 }
 
 function CenterMap() {
@@ -142,7 +153,7 @@ function CenterMap() {
       coordinates.push(arrToPush);
     }
 
-    var bounds = coordinates.reduce(function(bounds, coord) {
+    var bounds = coordinates.reduce(function (bounds, coord) {
       return bounds.extend(coord);
     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
@@ -166,7 +177,7 @@ function CenterMap() {
 
 // remove location click listener
 
-$("body").on("click", ".remove-location", function() {
+$("body").on("click", ".remove-location", function () {
   keyToRemove = $(this).attr("data-number");
 
   for (let i = 0; i < locations.length; i++) {
@@ -187,11 +198,9 @@ $("body").on("click", ".remove-location", function() {
       })
       .value()
   });
-
-
 });
 
-$("body").on("click", ".zoom-location", function() {
+$("body").on("click", ".zoom-location", function () {
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
@@ -219,84 +228,33 @@ $("#accom-button").on("click", function() {
   let x = currentX;
   let y = currentY;
 
-
-  if (x == 0 && y == 0){
-    alert('Please give us an idea of where you want to stay!');
+  if (x == 0 && y == 0) {
+    alert("Please give us an idea of where you want to stay!");
   } else {
+    console.log("Coordinates of point of focus:");
+    console.log(x + ":" + y);
 
-    console.log('Coordinates of point of focus:')
-    console.log(x + ':' + y);
-
-    // alert((x-.1) + ',' + (y-.1) + ',' +  (x+.1) + ',' +  (y+.1));
-    AccomRequest((x-.1), (y-.1), (x+.1), (y+.1));
-
-  // console.log(geoResponse);
-  };
-
+    AccomRequest();
+  }
 });
 
 // // food button onclick listener
 // $("#food-button").on("click", function() {
-
 //   let x = currentX;
 //   let y = currentY;
-
 //   if (x == 0 && y == 0){
 //     alert('Please give us an idea of where you want to stay!');
 //   } else {
 //     food(x, y);
 //   };
-
 // });
-
-
-// AUTO PITCH ON ZOOM FUNCTION - WIP - NOT WORKING
-
-// map.on("zoom", function() {
-
-//   // map.jumpTo({pitch: 20})
-// //   const currentZoom = map.getZoom();
-// //   map.setPitch(20);
-// // //   if (currentZoom < 10) {
-// // //     map.setPitch({
-
-// // //       pitch: 0 // Angle of cameraview
-
-// // //   });
-// // //   } else if (currentZoom > 5) {
-// // //     map.setPitch({
-
-// // //       pitch: 20 // Angle of cameraview
-
-// // //   });
-// // //   } else if (currentZoom > 10) {
-// // //     map.setPitch({
-
-// // //       pitch: 40 // Angle of cameraview
-
-// // //   });
-// // //   } else if (currentZoom > 15) {
-// // //     map.setPitch({
-
-// // //       pitch: 60 // Angle of cameraview
-
-// // //   });
-// // //   };
-
-// });
-
 
 
 $("#search-btn1").on("click", function() {
-  // search = $("#search-bar").val();
-  // navPage();
 
   // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
      $("._welcome_modal_card").css('display', 'none');
 
-    //  let search = geoResponse.name;
-    //  $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-    
     splashGone = true;
      map.addControl(geocoder, "bottom-left");
 });
@@ -304,7 +262,6 @@ $("#search-btn1").on("click", function() {
 
 
 $("#search-btn2").on("click", function() {
-  
 
   let random = chance.country({ full: true });
   $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
@@ -313,7 +270,6 @@ $("#search-btn2").on("click", function() {
 
   map.addControl(geocoder, "bottom-left");
   splashGone = true;
-
   
   $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
 
@@ -327,36 +283,16 @@ function FlyToBBox(search) {
     $.ajax({
         url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
         method: "GET"
-
       }).then(function(geoReply) {
           console.log(geoReply.features[0].bbox[0]);
 
-          let fish = geoReply.features[0].geometry.coordinates;
-      
-          // map.flyTo({
-          //   center: fish,
-          //   zoom: 5
-          // });
-          
-          // let coordinates = [];
-          //  let arrToPush = [geoReply.features[0].bbox[0], geoReply.features[0].bbox[1]];
-          //  coordinates.push(arrToPush);
-          //   arrToPush = [geoReply.features[0].bbox[2], geoReply.features[0].bbox[3]];
-          //   coordinates.push(arrToPush);
-
-          // var bounds = coordinates.reduce(function(bounds, coord) {
-          //   return bounds.extend(coord);
-          // }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-      
           map.fitBounds(geoReply.features[0].bbox, {
             padding: 10
           });
 
-
       }).catch(error => {
-    
         console.log(error);
-        
         });
-
     };
+
+
