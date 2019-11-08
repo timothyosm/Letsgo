@@ -26,41 +26,36 @@ map.on("load", function () {
 
   geocoder.on("result", function (ev) {
 
+    //set geoResponse with geocoder object and set global long lat variables
     geoResponse = ev.result;
     currentX = geoResponse.geometry.coordinates[0];
     currentY = geoResponse.geometry.coordinates[1];
 
+    // add marker to map
     var iconz = document.getElementById("scope-div");
     pointerX = geoResponse.geometry.coordinates[0];
     pointerY = geoResponse.geometry.coordinates[1];
     $("#scope-div").css("display", "block");
-    // add marker to map
     new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
 
     //hide splash screen
     if (splashGone == false) {
-    
-    map.addControl(geocoder, "bottom-left");
     splashGone = true;
-    let search = geoResponse.place_name;
-    
-    $(".mapboxgl-ctrl-geocoder--input").attr("value", search);
-
+    // add geocoder input box to map, update text with search result and hide welcome card
+    map.addControl(geocoder, "bottom-left");
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
     $("._welcome_modal_card").css('display', 'none');
-    }
+    };
   });
 });
 
 
-
 $(document).ready(function() {
 
-
+  //add geocoder to welcome card
   $("#search-bar-div").append(geocoder.onAdd(map));
+  //run user js stuff
   userCheck();
-
-
-
   
 });
 
@@ -94,9 +89,6 @@ $("#add-marker").on("click", function () {
 
     // push everything including marker to locations array
     locations.push(addLocation(idCounter, addText, addAddress, addX, addY));
-
-    console.log("locations array after ADD MARKER:");
-    console.log(locations);
 
     // send the data to firebase but not the marker
     database.ref(UUID).set({
@@ -137,12 +129,8 @@ function RedrawList() {
 </ion-card>
 
         `);
-  console.log("Y:" + locations[i].y);
-  console.log("X:" + locations[i].x);
-
-  }
-
-}
+  };
+};
 
 function CenterMap() {
   if (locations.length > 1) {
@@ -260,20 +248,16 @@ $("#search-btn1").on("click", function() {
   $("._welcome_modal_card").css('display', 'none');
     splashGone = true;
      map.addControl(geocoder, "bottom-left");
-     $(".mapboxgl-ctrl-geocoder--input").attr("value", searchbox);
 });
 
 
 $("#search-btn2").on("click", function() {
 
   let random = chance.country({ full: true });
-  $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
   FlyToBBox(random);
   map.addControl(geocoder, "bottom-left");
   splashGone = true;
-  $(".mapboxgl-ctrl-geocoder--input").attr("value", random);
   $("._welcome_modal_card").css('display', 'none');
-
 });
 
 
@@ -282,12 +266,34 @@ function FlyToBBox(search) {
     $.ajax({
         url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
         method: "GET"
-      }).then(function(geoReply) {
-          console.log(geoReply.features[0].bbox[0]);
-          map.fitBounds(geoReply.features[0].bbox, {
+      }).then(function(fuzzyReply) {
+        
+        geoResponse = fuzzyReply.features[0];
+        $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
+
+        // set global long lats
+        currentX = geoResponse.geometry.coordinates[0];
+        currentY = geoResponse.geometry.coordinates[1];
+    
+        // set scope
+        var iconz = document.getElementById("scope-div");
+        pointerX = geoResponse.geometry.coordinates[0];
+        pointerY = geoResponse.geometry.coordinates[1];
+        $("#scope-div").css("display", "block");
+        new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
+    
+        // if geoResponse is a an address or POI do geometry, else do bbox
+        if (geoResponse.place_type[0] == "address" || geoResponse.place_type[0] == "poi") {
+          map.flyTo({
+            center: [geoResponse.geometry.coordinates[0], geoResponse.geometry.coordinates[1]],
+            zoom: 15
+          });
+        } else {
+          map.fitBounds(geoResponse.bbox, {
             padding: 10
           });
-
+        };
+          
       }).catch(error => {
         console.log(error);
         });
