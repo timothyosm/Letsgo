@@ -1,5 +1,6 @@
 let addLayers = [];
 let HotelArray = [];
+let placesId = 0;
 
 function AccomRequest() {
   let settings = {
@@ -27,26 +28,28 @@ function AccomRequest() {
           response.result[i].latitude
         )
       );
-
-      map.addLayer({
-        id: "places" + [i],
-        type: "symbol",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: HotelArray
-          }
-        },
-        layout: {
-          "icon-image": "{icon}-15",
-          "icon-allow-overlap": true
-
-        }
-      });
     }
+    placesId++;
+    console.log(placesId);
+    map.addLayer({
+      id: "places" + placesId,
+      class: "target-place",
+      type: "symbol",
+      source: {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: HotelArray
+        }
+      },
+      layout: {
+        "icon-image": "{icon}-15",
+        "icon-allow-overlap": true
+      }
+    });
 
-    map.on("click", "places", function(e) {
+    map.on("click", "places" + placesId, function(e) {
+      console.log("hi");
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = e.features[0].properties.description;
 
@@ -87,21 +90,3 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
     }
   };
 }
-
-// function food(x, y) {
-//   $.ajax({
-//     url: `https://developers.zomato.com/api/v2.1/geocode?lat=${x}&lon=${y}`,
-//     method: "GET",
-//     headers: {
-//       "user-key": "bcda4dbfad87daa44b7690ccebd778db",
-
-//       "content-type": "application/json"
-//     }
-//   })
-//     .then(function(asd) {
-//       console.log(asd);
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-// }

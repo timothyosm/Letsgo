@@ -3,8 +3,10 @@
   <script src="./assets/javascript/maps.js"></script>
   <script src="./assets/javascript/hotels.js"></script>
   <script src="./assets/javascript/user.js"></script>
+  <script src="./assets/javascript/food.js"></script>
 
 <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap"rel="stylesheet"/>
+</head>
 
 <style>
   ._welcome_modal_card {
@@ -57,7 +59,7 @@
     </ion-card>
   </div>
 
-</head>
+
 
 <div class="flex-parent card viewport-full relative scroll-hidden">
   <div class="flex-child card-head flex-child--grow bg-darken10 viewport-half " id="map">
@@ -68,10 +70,6 @@
   
   <div class="card-body scroll-styled scroll-auto h120 pb-2">
     <div class="card-title">
-      <!-- <input type="button" id="add-marker" class="btn-dark" value="Add Location" />
-      <input type="button" id="center-button" class="btn-dark" value="Centre Map" />
-      <input type="button" id="accom-button" class="btn-dark" value="Show Accomodation" />
-      <input type="button" id="food-button" class="btn-dark" value="Show Food" /> -->
       <ion-button type="button" id="add-marker" color="dark" value="Add Location">
         <ion-icon name="checkmark" value="Add Location"></ion-icon>
       </ion-button>
@@ -90,29 +88,6 @@
         </ion-input>
       </ion-button>
 
-
-      <script>
-        $(function () {
-          $('input[name="firstdate"]').daterangepicker({
-            "singleDatePicker": true,
-            "autoApply": true,
-            "startDate": "11/01/2019",
-            "endDate": "11/07/2019",
-            "drops": "up",
-            "buttonClasses": "ion-button",
-            "applyButtonClasses": "ion-button",
-            "cancelClass": "ion-button"
-          }, function (start) {
-            console.log(start.format());
-            database.ref(`${UUID}/dates`).set({
-              firstDate: start.format()
-            });
-          });
-        });
-      </script>
-
-      <div></div>
-
       <ion-button color="dark" id="unique-code">
         <ion-icon name="clipboard"></ion-icon>
 
@@ -126,3 +101,23 @@
   </div>
 </div>
 </div>
+
+<script>
+  $(function () {
+    $('input[name="firstdate"]').daterangepicker({
+      "singleDatePicker": true,
+      "autoApply": true,
+      "startDate": "11/01/2019",
+      "endDate": "11/07/2019",
+      "drops": "up",
+      "buttonClasses": "ion-button",
+      "applyButtonClasses": "ion-button",
+      "cancelClass": "ion-button"
+    }, function (start) {
+      console.log(start.format());
+      database.ref(`${UUID}/dates`).set({
+        firstDate: start.format()
+      });
+    });
+  });
+</script>
