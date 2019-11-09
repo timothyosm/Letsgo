@@ -1,13 +1,36 @@
 <head>
-    <link href="./assets/css/mapstyle.css" rel="stylesheet" />
-    <script src="./assets/javascript/user.js"></script>
-    <script src="./assets/javascript/maps.js"></script>
-    <script src="./assets/javascript/hotels.js"></script>
-  
-  
-    <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet" />
-  
-    <style>
+
+  <link href="./assets/css/mapstyle.css" rel="stylesheet" />
+  <script src="./assets/javascript/user.js"></script>
+  <script src="./assets/javascript/maps.js"></script>
+  <script src="./assets/javascript/hotels.js"></script>
+  <script src="./assets/javascript/weather.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet" />
+
+  <style>
+    ._welcome_modal_card {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 1;
+    }
+
+    ._welcome_modal_card ion-card {
+      background: white;
+      font-family: 'Roboto', sans-serif;
+      overflow: visible;
+    }
+
+    #search-bar-div {
+    text-align: center;
+    align-content: center;
+  }
+
+    @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
       ._welcome_modal_card {
         position: absolute;
         top: 40%;
