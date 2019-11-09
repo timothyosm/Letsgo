@@ -12,6 +12,9 @@ let idInurl;
 
 let search;
 
+let currentTemp = [];
+let weekWeather = [];
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
