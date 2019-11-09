@@ -5,52 +5,57 @@
   <script src="./assets/javascript/hotels.js"></script>
 
 
-<link href="https://fonts.googleapis.com/css?family=Arvo&display=swap"rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet" />
 
-<style>
-  ._welcome_modal_card {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    z-index:1;
+  <style>
+    ._welcome_modal_card {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 1;
+    }
+
+    ._welcome_modal_card ion-card {
+      background: white;
+      font-family: 'Roboto', sans-serif;
+      overflow: visible;
+    }
+
+    #search-bar-div {
+    text-align: center;
+    align-content: center;
   }
 
-  ._welcome_modal_card ion-card {
-    background: white;
-    font-family: "Arvo", serif;
-    overflow: visible;
-  }
-  
-</style>
+    @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
+      ._welcome_modal_card {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 33%;
+        z-index: 1;
+      }
+    }
+  </style>
 
-<div class="_welcome_modal_card">
+  <div class="_welcome_modal_card">
     <ion-card class="animation-fade-in">
       <ion-card-header>
         <ion-card-title style="text-align: center; font-size: 1.5rem;">
           Where Would You Like To Go Next ?
         </ion-card-title>
       </ion-card-header>
-  
+
       <ion-card-content>
-          <div id="search-bar-div"></div>
-        
-        <ion-button
-          id="search-btn1"
-          style="position: relative;margin-top: 1rem;"
-          size="medium"
-          color="light"
-          >GO</ion-button
-        >
-        <ion-button
-          id="search-btn2"
-          style="position: relative;margin-top: 1rem;"
-          size="medium"
-          color="light"
-          >I'm Feeling Lucky</ion-button
-        >
-        
+        <div id="search-bar-div"></div>
+
+        <ion-button id="search-btn1" style="position: relative;margin-top: 1rem;" size="medium" color="dark">GO
+        </ion-button>
+        <ion-button id="search-btn2" style="position: relative;margin-top: 1rem;" size="medium" color="dark">I'm
+          Feeling Lucky</ion-button>
+
       </ion-card-content>
     </ion-card>
   </div>
@@ -63,10 +68,10 @@
       <img src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png" />
     </div>
   </div>
-  
+
   <div class="card-body scroll-styled scroll-auto h120 pb-2">
     <div class="card-title">
-    
+
       <ion-button type="button" id="add-marker" color="dark" value="Add Location">
         <ion-icon name="checkmark" value="Add Location"></ion-icon>
       </ion-button>
@@ -109,12 +114,11 @@
       <div></div>
 
       <ion-button color="dark" id="unique-code">
-
+        <ion-icon name="clipboard"></ion-icon>
       </ion-button>
     </div>
-    
-    <div>
 
+    <div>
       <div id="location-list"></div>
     </div>
   </div>
