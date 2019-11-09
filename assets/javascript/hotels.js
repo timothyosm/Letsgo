@@ -14,7 +14,7 @@ function AccomRequest() {
     }
   };
 
-  $.ajax(settings).done(function(response) {
+  $.ajax(settings).done(function (response) {
     console.log(response);
 
     for (let i = 0; i < response.result.length; i++) {
@@ -25,7 +25,8 @@ function AccomRequest() {
           response.result[i].address,
           response.result[i].min_total_price,
           response.result[i].longitude,
-          response.result[i].latitude
+          response.result[i].latitude,
+          response.result[i].url
         )
       );
     }
@@ -48,7 +49,7 @@ function AccomRequest() {
       }
     });
 
-    map.on("click", "places" + placesId, function(e) {
+    map.on("click", "places" + placesId, function (e) {
       console.log("hi");
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = e.features[0].properties.description;
@@ -68,7 +69,7 @@ function AccomRequest() {
   });
 }
 
-function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
+function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat, url) {
   return {
     type: "Feature",
     properties: {
@@ -79,7 +80,8 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
                   <ion-label>
                     <h3>${hotelName}</h3>
                     <p>Address: ${hotelAdd}</p>
-                    <p>Starting From (AUD): $${hotelPrice}</p>
+                    <p>Starting From (AUD): ${hotelPrice}</p>
+                    <a href=${url} target="_blank">Book now!</ion-icon></a>
                   </ion-label>
                   </ion-item>`,
       icon: "rocket"
