@@ -46,6 +46,55 @@ map.on("load", function() {
       $("._welcome_modal_card").css("display", "none");
     }
   });
+
+  // Insert the layer beneath any symbol layer.
+  var layers = map.getStyle().layers;
+
+  var labelLayerId;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
+      labelLayerId = layers[i].id;
+      break;
+    }
+  }
+
+  // 3D building Feature
+  map.addLayer(
+    {
+      id: "3d-buildings",
+      source: "composite",
+      "source-layer": "building",
+      filter: ["==", "extrude", "true"],
+      type: "fill-extrusion",
+      minzoom: 15,
+      paint: {
+        "fill-extrusion-color": "#aaa",
+
+        // use an 'interpolate' expression to add a smooth transition effect to the
+        // buildings as the user zooms in
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "height"]
+        ],
+        "fill-extrusion-base": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "min_height"]
+        ],
+        "fill-extrusion-opacity": 0.6
+      }
+    },
+    labelLayerId
+  );
 });
 
 $(document).ready(function() {
@@ -97,7 +146,7 @@ $("#add-marker").on("click", async function() {
         .value()
     });
   }
-  mapLines()
+  mapLines();
 });
 
 // center button onclick listener
@@ -298,37 +347,39 @@ function FlyToBBox(search) {
     });
 }
 
-
-
-function mapLines(){
+function mapLines() {
   map.addLayer({
-    "id": "route",
-    "type": "line",
-    "source": {
-      "type": "geojson",
-      "data": {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
+    id: "route",
+    type: "line",
+    source: {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [
             [locations[0].x, locations[0].y],
             [locations[1].x, locations[1].y]
           ]
         }
       }
     },
-    "layout": {
+    layout: {
       "line-join": "round",
       "line-cap": "round"
     },
-    "paint": {
+    paint: {
       "line-color": "#888",
       "line-width": 2,
       "line-dasharray": [2, 5]
     }
-
   });
   console.log(locations[0].x, locations[0].y),
-  console.log(locations[1].x, locations[1].y)
+    console.log(locations[1].x, locations[1].y);
+}
+
+// Toggle Dark Mode
+function darkMode() {
+  map.setStyle("mapbox://styles/mapbox/dark-v10");
 }
