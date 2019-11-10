@@ -6,7 +6,7 @@ var map = new mapboxgl.Map({
   style: "mapbox://styles/mapbox/light-v10",
   logoPosition: "top-left",
   center: [30, 7],
-  zoom: 0.9,
+  zoom: 10,
   pitch: 0,
   maxZoom: 18
 });
@@ -97,6 +97,7 @@ $("#add-marker").on("click", async function() {
         .value()
     });
   }
+  mapLines()
 });
 
 // center button onclick listener
@@ -217,7 +218,7 @@ $("#accom-button").on("click", function() {
   let y = currentY;
 
   if (x == 0 && y == 0) {
-    alert("Please give us an idea of where you want to stay!");
+    console.log("Please give us an idea of where you want to stay!");
   } else {
     console.log("Coordinates of point of focus:");
     console.log(x + ":" + y);
@@ -295,4 +296,39 @@ function FlyToBBox(search) {
     .catch(error => {
       console.log(error);
     });
+}
+
+
+
+function mapLines(){
+  map.addLayer({
+    "id": "route",
+    "type": "line",
+    "source": {
+      "type": "geojson",
+      "data": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [locations[0].x, locations[0].y],
+            [locations[1].x, locations[1].y]
+          ]
+        }
+      }
+    },
+    "layout": {
+      "line-join": "round",
+      "line-cap": "round"
+    },
+    "paint": {
+      "line-color": "#888",
+      "line-width": 2,
+      "line-dasharray": [2, 5]
+    }
+
+  });
+  console.log(locations[0].x, locations[0].y),
+  console.log(locations[1].x, locations[1].y)
 }
