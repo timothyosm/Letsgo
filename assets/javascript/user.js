@@ -1,4 +1,4 @@
-
+let justdrawn = false;
 function userCheck() {
 
   let url = window.location.href;
@@ -61,7 +61,9 @@ function userCheck() {
             element.name,
             element.address,
             element.x,
-            element.y
+            element.y,
+            element.day,
+            element.order
           )
         );
 
@@ -70,7 +72,9 @@ function userCheck() {
         idCounter = highestID;
       });
 
+      
       RedrawList();
+
       CenterMap();
 
     },

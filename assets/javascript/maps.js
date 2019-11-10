@@ -52,6 +52,8 @@ map.on("load", function () {
 
 $(document).ready(function() {
 
+
+
   //add geocoder to welcome card
   $("#search-bar-div").append(geocoder.onAdd(map));
   //run user js stuff
@@ -60,13 +62,15 @@ $(document).ready(function() {
 });
 
 // adds current location to locations array as object
-function addLocation(idCounter, name, address, x, y) {
+function addLocation(idCounter, name, address, x, y, day, order) {
   return {
     id: idCounter,
     name: name,
     address: address,
     x: x,
     y: y,
+    day: day,
+    order: order,
     marker: new mapboxgl.Marker().setLngLat([x, y]).addTo(map)
   };
 }
@@ -84,12 +88,15 @@ $("#add-marker").on("click", function () {
     let addX = geoResponse.geometry.coordinates[0];
     let addY = geoResponse.geometry.coordinates[1];
 
+    let addDay = 0;
+    let addOrder = 1;
+
     // push location to array
     idCounter++;
 
-    // push everything including marker to locations array
-    locations.push(addLocation(idCounter, addText, addAddress, addX, addY));
-
+    // push everything including marker to locations array  
+    locations.push(addLocation(idCounter, addText, addAddress, addX, addY, addDay, addOrder));
+  
     // send the data to firebase but not the marker
     database.ref(UUID).set({
       locations: _(locations)
@@ -107,29 +114,152 @@ $("#center-button").on("click", function () {
   CenterMap();
 });
 
+
+function sort() {
+
+    trip=[];
+    lastDay = 0;
+    itemTotal = locations.length;
+
+    // get last day
+    for (let i = 0; i < locations.length; i++) {
+      if (locations[i].day > lastDay) lastDay = locations[i].day;
+    };
+
+  for (let dayCounter = 0; dayCounter < lastDay+1; dayCounter++) {   // THE BUG IS IN THIS LOOP ADDING 11 ITERATIONS!
+
+      currentDay = [];
+      // get day
+      for (let i = 0; i < locations.length; i++) {
+          if (locations[i].day == dayCounter) {
+              currentDay.push(locations[i]);
+          };
+      };
+
+      
+      //bubble sort day
+      let sorted = false;
+      while (!sorted) {
+          
+          sorted = true;
+
+          for (let i = 0; i < currentDay.length-1; i++) {
+              
+              if (currentDay[i].order > currentDay[i+1].order) {
+                  let temp = currentDay[i+1];
+                  currentDay[i+1] = currentDay[i];
+                  currentDay[i] = temp;
+                  sorted=false;
+              };
+          };
+      };
+
+      //push day to trip array
+      
+        trip.push(currentDay);
+      
+  };
+  console.log('le trip');
+  console.log(trip);
+}
+
 // refreshes itinery list
 function RedrawList() {
+
+  sort();
+
+  // start redrawing itinery list
   $("#location-list").html("");
+  $('#location-list').append('<div class="container"><div class="row">');
 
-  for (let i = 0; i < locations.length; i++) {
-    $("#location-list").append(`
-    <ion-card>
-    <ion-card-header>
-        <ion-card-subtitle></ion-card-subtitle>
-        <ion-card-title>${locations[i].name}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-        ${locations[i].address}
-    </ion-card-content>
-    <ion-item>
-        <ion-button class="zoom-location" color="dark" data-number="${locations[i].id}">Go To</ion-button>
-        <ion-button class="remove-location" color="dark" data-number="${locations[i].id}">Delete</ion-button>
-        <ion-button class="Add-event" color="dark" data-number="${locations[i].id}">Add Event</ion-button>
-    </ion-item>
-</ion-card>
+  for (let d = 0; d < trip.length; d++) {
 
-        `);
+  //iterate for each day
+  $('#location-list').append(`<ul id="day${d}-div" class="connectedSortable" data-day="${d}"></ul>`);
+
+      theDay = trip[d];
+      
+      $(`#day${d}-div`).append('<div class="col-3">');
+      $(`#day${d}-div`).append('Day ' + (d + 1));
+
+      for(var i in theDay) {
+              
+          li = $(`
+                      <li>
+                          <ion-card>
+                              <ion-card-header>
+                                  <ion-card-subtitle></ion-card-subtitle>
+                              <ion-card-title>${theDay[i].name}</ion-card-title>
+                          </ion-card-header>
+                          <ion-card-content>
+                              Address:${theDay[i].address} Long:${theDay[i].x} Lat:${theDay[i].y} Day:${theDay[i].day} Order:${theDay[i].order}
+                          </ion-card-content>
+                          <ion-item>
+                              <ion-button class="zoom-location" color="dark" data-number="${theDay[i].id}">Go To</ion-button>
+                              <ion-button class="remove-location" color="dark" data-number="${theDay[i].id}">Delete</ion-button>
+                              <ion-button class="Add-event" color="dark" data-number="${theDay[i].id}">Add Event</ion-button>
+                          </ion-item>
+                          </ion-card>
+                      </li>
+              `);
+                  
+              li.data('d', theDay[i]);
+              $(`#day${d}-div`).append(li);
+              
+          }
+          $(`#day${d}-div`).append('</div>');
+
+          $(`#day${d}-div`).sortable({
+              connectWith: ".connectedSortable",
+              update: function(event, ui) {
+              new_locations = $(this).find('li').map(function(i, el) {
+                  return $(el).data('d')
+                  }).get()
+                 
+              // update that day in trip array 
+              trip[d] = new_locations;
+
+              for (let l = 0; l < trip[d].length; l++) {
+                  //sets order key to l - its index in day array
+                  trip[d][l].order = l;
+                  //sets day key to d - its day's index in trip
+                  trip[d][l].day = d;
+              }
+              
+
+              locations = [];
+              
+
+              for (let g = 0; g < trip.length; g++) {
+                  //iterates for each day
+                  for(let h = 0; h < trip[g].length; h++) {
+                    locations.push(trip[g][h]);
+                  }
+              }
+
+              if (locations.length == itemTotal ) {
+
+                  database.ref(UUID).set({
+                    locations: _(locations)
+                      .map(place => {
+                        return _.omit(place, ["marker"]);
+                      })
+                      .value()
+                      
+                    });
+              }
+             
+              
+            }
+
+
+          });
+
+
+
   };
+  $(`location-list`).append('</div></div>');
+  
 };
 
 function CenterMap() {
