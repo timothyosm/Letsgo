@@ -4,6 +4,13 @@ let splashGone = false;
 let geoResponse;
 let locations = [];
 let idCounter = 0;
+
+let trip = [];
+let itemTotal = 0;
+
+let cursorDay = 0;
+let cursorOrder = 0;
+
 let currentX = 0;
 let currentY = 0;
 

@@ -56,13 +56,15 @@ $(document).ready(function() {
 });
 
 // adds current location to locations array as object
-function addLocation(idCounter, name, address, x, y) {
+function addLocation(idCounter, name, address, x, y, day, order) {
   return {
     id: idCounter,
     name: name,
     address: address,
     x: x,
     y: y,
+    day: day,
+    order: order,
     marker: new mapboxgl.Marker().setLngLat([x, y]).addTo(map)
   };
 }
@@ -82,12 +84,15 @@ $("#add-marker").on("click", async function() {
     let addX = geoResponse.geometry.coordinates[0];
     let addY = geoResponse.geometry.coordinates[1];
 
+    let addDay = cursorDay;
+    let addOrder = cursorOrder;
+
     // push location to array
     idCounter++;
-
-    // push everything including marker to locations array
-    locations.push(addLocation(idCounter, addText, addAddress, addX, addY));
-
+    cursorOrder = cursorOrder + 0.001;
+    // push everything including marker to locations array  
+    locations.push(addLocation(idCounter, addText, addAddress, addX, addY, addDay, addOrder));
+  
     // send the data to firebase but not the marker
     database.ref(UUID).set({
       locations: _(locations)
@@ -104,6 +109,7 @@ $("#add-marker").on("click", async function() {
 $("#center-button").on("click", function() {
   CenterMap();
 });
+
 
 // refreshes itinery list
 function RedrawList() {
