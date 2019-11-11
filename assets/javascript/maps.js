@@ -1,3 +1,7 @@
+presentLoading(1500) 
+
+
+
 // the map canvas itself
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ";
@@ -310,4 +314,37 @@ function mapLines(){
   });
   console.log(locations[0].x, locations[0].y),
   console.log(locations[1].x, locations[1].y)
+}
+
+
+
+
+
+
+
+
+
+async function presentLoading(a) {
+  const loading = document.createElement('ion-loading');
+  loading.message = 'Loading...',
+  loading.duration = a;
+
+  document.body.appendChild(loading);
+  await loading.present();
+
+  const { role, data } = await loading.onDidDismiss();
+
+  console.log('Loading dismissed!');
+}
+
+function presentLoadingWithOptions() {
+  const loading = document.createElement('ion-loading');
+  loading.spinner = null;
+  loading.duration = 5000;
+  loading.message = 'Please wait...';
+  loading.translucent = true;
+  loading.cssClass = 'custom-class custom-loading';
+
+  document.body.appendChild(loading);
+  return loading.present();
 }
