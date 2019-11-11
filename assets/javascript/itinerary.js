@@ -6,11 +6,13 @@ function Sort() {
     itemTotal = locations.length;
 
     // get last day
-    for (let i = 0; i < locations.length; i++) {
-      if (locations[i].day > lastDay) lastDay = locations[i].day;
+    for (let i = 0; i < locations.length; i++) {      
+      if (locations[i].day > lastDay) lastDay = locations[i].day;      
     };
 
-  for (let dayCounter = 0; dayCounter < lastDay+1; dayCounter++) {  
+    
+
+  for (let dayCounter = 0; dayCounter <= lastDay; dayCounter++) {  
 
       currentDay = [];
       // get day
@@ -77,11 +79,11 @@ function RedrawList() {
   // start redrawing itinery list
   $("#location-list").html("");
 
-  for (let d = 0; d < trip.length+1; d++) {
+  for (let d = 0; d <= trip.length; d++) {
 
   //iterate for each day
-  if (d < trip.length ) $('#location-list').append(`<ul id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="background-color: rgb(240, 240, 240); min-height: 180px;"></ul>`);
-  if (d == trip.length && locations[0] !=null) $('#location-list').append(`<ul id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="color: lightgray; background-color: rgb(240, 240, 240); min-height: 50px;"></ul>`);
+  if (d < trip.length) $('#location-list').append(`<ul id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="background-color: rgb(240, 240, 240); min-height: 180px;"></ul>`);
+  if (d == trip.length) $('#location-list').append(`<ul id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="color: lightgray; background-color: rgb(240, 240, 240); min-height: 50px;"></ul>`);
 
       theDay = trip[d];
       
