@@ -1,6 +1,4 @@
-presentLoading(1500) 
-
-
+presentLoading(1500);
 
 // the map canvas itself
 mapboxgl.accessToken =
@@ -50,6 +48,55 @@ map.on("load", function() {
       $("._welcome_modal_card").css("display", "none");
     }
   });
+
+  // Insert the layer beneath any symbol layer.
+  var layers = map.getStyle().layers;
+
+  var labelLayerId;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
+      labelLayerId = layers[i].id;
+      break;
+    }
+  }
+
+  // 3D building Feature
+  map.addLayer(
+    {
+      id: "3d-buildings",
+      source: "composite",
+      "source-layer": "building",
+      filter: ["==", "extrude", "true"],
+      type: "fill-extrusion",
+      minzoom: 15,
+      paint: {
+        "fill-extrusion-color": "#aaa",
+
+        // use an 'interpolate' expression to add a smooth transition effect to the
+        // buildings as the user zooms in
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "height"]
+        ],
+        "fill-extrusion-base": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "min_height"]
+        ],
+        "fill-extrusion-opacity": 0.6
+      }
+    },
+    labelLayerId
+  );
 });
 
 $(document).ready(function() {
@@ -94,9 +141,11 @@ $("#add-marker").on("click", async function() {
     // push location to array
     idCounter++;
     cursorOrder = cursorOrder + 0.001;
-    // push everything including marker to locations array  
-    locations.push(addLocation(idCounter, addText, addAddress, addX, addY, addDay, addOrder));
-  
+    // push everything including marker to locations array
+    locations.push(
+      addLocation(idCounter, addText, addAddress, addX, addY, addDay, addOrder)
+    );
+
     // send the data to firebase but not the marker
     database.ref(UUID).set({
       locations: _(locations)
@@ -106,14 +155,13 @@ $("#add-marker").on("click", async function() {
         .value()
     });
   }
-  mapLines()
+  mapLines();
 });
 
 // center button onclick listener
 $("#center-button").on("click", function() {
   CenterMap();
 });
-
 
 function CenterMap() {
   if (locations.length > 1) {
@@ -281,64 +329,56 @@ function FlyToBBox(search) {
     });
 }
 
-
-
-function mapLines(){
+function mapLines() {
   map.addLayer({
-    "id": "route",
-    "type": "line",
-    "source": {
-      "type": "geojson",
-      "data": {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
+    id: "route",
+    type: "line",
+    source: {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [
             [locations[0].x, locations[0].y],
             [locations[1].x, locations[1].y]
           ]
         }
       }
     },
-    "layout": {
+    layout: {
       "line-join": "round",
       "line-cap": "round"
     },
-    "paint": {
+    paint: {
       "line-color": "#888",
       "line-width": 2,
       "line-dasharray": [2, 5]
     }
-
   });
   console.log(locations[0].x, locations[0].y),
-  console.log(locations[1].x, locations[1].y)
+    console.log(locations[1].x, locations[1].y);
 }
 
-
-
-
-
-
-
 async function presentLoading(a) {
-  const loading = document.createElement('ion-loading');
-  loading.message = 'Loading...',
-  loading.duration = a;
+  const loading = document.createElement("ion-loading");
+  (loading.message = "Loading..."), (loading.duration = a);
 
   document.body.appendChild(loading);
   await loading.present();
 
   const { role, data } = await loading.onDidDismiss();
 
-  console.log('Loading dismissed!');
+  console.log("Loading dismissed!");
   RedrawList();
 }
 
-
-$('#close-btn').click(function () {
-  $('._welcome_modal_card').hide();
+$("#close-btn").click(function() {
+  $("._welcome_modal_card").hide();
   event.stopPropagation();
+});
 
-})
+function darkMode() {
+  map.setStyle("mapbox://styles/mapbox/dark-v10");
+}
