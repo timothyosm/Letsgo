@@ -111,33 +111,6 @@ $("#center-button").on("click", function() {
 });
 
 
-// refreshes itinery list
-function RedrawList() {
-  $("#location-list").html("");
-
-  for (let i = 0; i < locations.length; i++) {
-    $("#location-list").append(`
-    <ion-card>
-    <ion-card-header>
-        <ion-card-subtitle></ion-card-subtitle>
-        <ion-card-title>${locations[i].name}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-        Current Temperature (C): ${currentTemp}
-        <br>
-        Week Summary: ${weekWeather}
-    </ion-card-content>
-    <ion-item>
-        <ion-button class="zoom-location" color="dark" data-number="${locations[i].id}">Go To</ion-button>
-        <ion-button class="remove-location" color="dark" data-number="${locations[i].id}">Delete</ion-button>
-        <ion-button class="Add-event" color="dark" data-number="${locations[i].id}">Add Event</ion-button>
-    </ion-item>
-</ion-card>
-
-        `);
-  }
-}
-
 function CenterMap() {
   if (locations.length > 1) {
     // zooming to include all markers
