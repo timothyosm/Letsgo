@@ -380,5 +380,10 @@ $("#close-btn").click(function() {
 });
 
 function darkMode() {
-  map.setStyle("mapbox://styles/mapbox/dark-v10");
+  var toggle = map.setStyle("mapbox://styles/mapbox/dark-v10");
+  if (document.getElementById("darkmode").classList.toggle("toggle-checked")) {
+    toggle;
+  } else {
+    map.setStyle("mapbox://styles/mapbox/light-v10");
+  }
 }
