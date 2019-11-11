@@ -383,3 +383,7 @@ function presentLoadingWithOptions() {
   document.body.appendChild(loading);
   return loading.present();
 }
+
+function darkMode() {
+  map.setStyle("mapbox://styles/mapbox/dark-v10");
+}
