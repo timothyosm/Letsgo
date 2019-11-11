@@ -26,6 +26,10 @@ h6 {
   right: 20px;
 }
 
+#map canvas {
+  cursor: crosshair;
+}
+
 .mapboxgl-ctrl-geocoder { 
     min-width:100%; 
 }

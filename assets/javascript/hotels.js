@@ -17,6 +17,8 @@ function AccomRequest() {
   $.ajax(settings).done(function (response) {
     console.log(response);
 
+    FlyToHotels(response);
+
     for (let i = 0; i < response.result.length; i++) {
       HotelArray.push(
         addHotel(
@@ -50,9 +52,26 @@ function AccomRequest() {
     });
 
     map.on("click", "places" + placesId, function (e) {
-      console.log("hi");
+      
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = e.features[0].properties.description;
+      
+      //scrape out the name of the joint!
+      let fish = description;
+      let pointA = fish.indexOf("<h3>");
+      let theGoods = fish.slice(pointA+4);
+      let pointB = theGoods.indexOf("</h3>");
+      
+      let theName = theGoods.slice(0, pointB);
+      let theX = e.features[0].geometry.coordinates[0];
+      let theY = e.features[0].geometry.coordinates[1];
+
+      console.log(theName);
+      console.log(theX);
+      console.log(theY);
+      FlyToPlace(theName, theX, theY, 0.001);
+
+      $(`.mapboxgl-ctrl-geocoder--input`).attr(`value`, `${theName}`);
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
@@ -84,7 +103,7 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat, url) {
                     <a href=${url} target="_blank">Book now!</ion-icon></a>
                   </ion-label>
                   </ion-item>`,
-      icon: "rocket"
+      icon: "suitcase"
     },
     geometry: {
       type: "Point",
@@ -92,3 +111,26 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat, url) {
     }
   };
 }
+
+
+// fit map nice and tight around hotels
+function FlyToHotels(response) {
+  
+  if (response != null) {
+    
+    var coordinates = [];
+    for (let i = 0; i < response.result.length; i++) {
+      let arrToPush = [response.result[i].longitude, response.result[i].latitude];
+      coordinates.push(arrToPush);
+    }
+ 
+    var bounds = coordinates.reduce(function(bounds, coord) {
+      return bounds.extend(coord);
+    }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+    map.fitBounds(bounds, {
+      padding: 20
+    });
+    
+  }
+} 

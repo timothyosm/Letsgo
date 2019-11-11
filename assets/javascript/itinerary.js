@@ -10,8 +10,6 @@ function Sort() {
     if (locations[i].day > lastDay) lastDay = locations[i].day;
   };
 
-
-
   for (let dayCounter = 0; dayCounter <= lastDay; dayCounter++) {
 
     currentDay = [];
@@ -163,6 +161,10 @@ function RedrawList() {
 function CursorCard(thispass, pos) {
   // console.log(thispass);
   // console.log(event.target);
+
+//   ion-card {
+//     border-top: 3px solid colorofyourchosing
+//  }
   event.stopPropagation();
   $(".cursor-target").css('background-color', 'white');
   $(".day-cursor-target").css('background-color', 'rgb(240, 240, 240)');
