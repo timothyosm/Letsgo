@@ -333,21 +333,12 @@ async function presentLoading(a) {
   const { role, data } = await loading.onDidDismiss();
 
   console.log('Loading dismissed!');
+  RedrawList();
 }
 
-function presentLoadingWithOptions() {
-  const loading = document.createElement('ion-loading');
-  loading.spinner = null;
-  loading.duration = 5000;
-  loading.message = 'Please wait...';
-  loading.translucent = true;
-  loading.cssClass = 'custom-class custom-loading';
-
-  document.body.appendChild(loading);
-  return loading.present();
-}
 
 $('#close-btn').click(function () {
   $('._welcome_modal_card').hide();
   event.stopPropagation();
+
 })
