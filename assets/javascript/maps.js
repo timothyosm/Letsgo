@@ -6,7 +6,7 @@ var map = new mapboxgl.Map({
   style: "mapbox://styles/mapbox/light-v10",
   logoPosition: "top-left",
   center: [30, 7],
-  zoom: 0.9,
+  zoom: 10,
   pitch: 0,
   maxZoom: 18
 });
@@ -21,11 +21,10 @@ var geocoder = new MapboxGeocoder({
 
 // map.addControl(geocoder, "bottom-left");
 
-map.on("load", function () {
+map.on("load", function() {
   // Listen for the `geocoder.input` event that is triggered when a user makes a search
 
-  geocoder.on("result", function (ev) {
-
+  geocoder.on("result", function(ev) {
     //set geoResponse with geocoder object and set global long lat variables
     geoResponse = ev.result;
     currentX = geoResponse.geometry.coordinates[0];
@@ -40,23 +39,20 @@ map.on("load", function () {
 
     //hide splash screen
     if (splashGone == false) {
-    splashGone = true;
-    // add geocoder input box to map, update text with search result and hide welcome card
-    map.addControl(geocoder, "bottom-left");
-    $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
-    $("._welcome_modal_card").css('display', 'none');
-    };
+      splashGone = true;
+      // add geocoder input box to map, update text with search result and hide welcome card
+      map.addControl(geocoder, "bottom-left");
+      $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
+      $("._welcome_modal_card").css("display", "none");
+    }
   });
 });
 
-
 $(document).ready(function() {
-
   //add geocoder to welcome card
   $("#search-bar-div").append(geocoder.onAdd(map));
   //run user js stuff
   userCheck();
-  
 });
 
 // adds current location to locations array as object
@@ -73,7 +69,9 @@ function addLocation(idCounter, name, address, x, y, day, order) {
   };
 }
 
-$("#add-marker").on("click", function () {
+$("#add-marker").on("click", async function() {
+  await weatherRequest();
+
   if (geoResponse == undefined) {
     $("#location-list").append(
       "Search for a building, street or landmark first!"
@@ -103,15 +101,42 @@ $("#add-marker").on("click", function () {
         })
         .value()
     });
-
   }
+  mapLines()
 });
 
 // center button onclick listener
-$("#center-button").on("click", function () {
+$("#center-button").on("click", function() {
   CenterMap();
 });
 
+
+// refreshes itinery list
+function RedrawList() {
+  $("#location-list").html("");
+
+  for (let i = 0; i < locations.length; i++) {
+    $("#location-list").append(`
+    <ion-card>
+    <ion-card-header>
+        <ion-card-subtitle></ion-card-subtitle>
+        <ion-card-title>${locations[i].name}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        Current Temperature (C): ${currentTemp}
+        <br>
+        Week Summary: ${weekWeather}
+    </ion-card-content>
+    <ion-item>
+        <ion-button class="zoom-location" color="dark" data-number="${locations[i].id}">Go To</ion-button>
+        <ion-button class="remove-location" color="dark" data-number="${locations[i].id}">Delete</ion-button>
+        <ion-button class="Add-event" color="dark" data-number="${locations[i].id}">Add Event</ion-button>
+    </ion-item>
+</ion-card>
+
+        `);
+  }
+}
 
 function CenterMap() {
   if (locations.length > 1) {
@@ -123,7 +148,7 @@ function CenterMap() {
       coordinates.push(arrToPush);
     }
 
-    var bounds = coordinates.reduce(function (bounds, coord) {
+    var bounds = coordinates.reduce(function(bounds, coord) {
       return bounds.extend(coord);
     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
@@ -147,7 +172,7 @@ function CenterMap() {
 
 // remove location click listener
 
-$("body").on("click", ".remove-location", function () {
+$("body").on("click", ".remove-location", function() {
   keyToRemove = $(this).attr("data-number");
 
   for (let i = 0; i < locations.length; i++) {
@@ -170,7 +195,7 @@ $("body").on("click", ".remove-location", function () {
   });
 });
 
-$("body").on("click", ".zoom-location", function () {
+$("body").on("click", ".zoom-location", function() {
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
@@ -199,7 +224,7 @@ $("#accom-button").on("click", function() {
   let y = currentY;
 
   if (x == 0 && y == 0) {
-    alert("Please give us an idea of where you want to stay!");
+    console.log("Please give us an idea of where you want to stay!");
   } else {
     console.log("Coordinates of point of focus:");
     console.log(x + ":" + y);
@@ -219,65 +244,97 @@ $("#accom-button").on("click", function() {
 //   };
 // });
 
-
 $("#search-btn1").on("click", function() {
-
-  
   let searchbox = $(".mapboxgl-ctrl-geocoder--input").val();
-  
+
   FlyToBBox(searchbox);
-  $("._welcome_modal_card").css('display', 'none');
-    splashGone = true;
-     map.addControl(geocoder, "bottom-left");
+  $("._welcome_modal_card").css("display", "none");
+  splashGone = true;
+  map.addControl(geocoder, "bottom-left");
 });
 
-
 $("#search-btn2").on("click", function() {
-
   let random = chance.country({ full: true });
   FlyToBBox(random);
   map.addControl(geocoder, "bottom-left");
   splashGone = true;
-  $("._welcome_modal_card").css('display', 'none');
+  $("._welcome_modal_card").css("display", "none");
 });
 
-
 function FlyToBBox(search) {
-    
-    $.ajax({
-        url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
-        method: "GET"
-      }).then(function(fuzzyReply) {
-        
-        geoResponse = fuzzyReply.features[0];
-        $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
+  $.ajax({
+    url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
+    method: "GET"
+  })
+    .then(function(fuzzyReply) {
+      geoResponse = fuzzyReply.features[0];
+      $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
 
-        // set global long lats
-        currentX = geoResponse.geometry.coordinates[0];
-        currentY = geoResponse.geometry.coordinates[1];
-    
-        // set scope
-        var iconz = document.getElementById("scope-div");
-        pointerX = geoResponse.geometry.coordinates[0];
-        pointerY = geoResponse.geometry.coordinates[1];
-        $("#scope-div").css("display", "block");
-        new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
-    
-        // if geoResponse is a an address or POI do geometry, else do bbox
-        if (geoResponse.place_type[0] == "address" || geoResponse.place_type[0] == "poi") {
-          map.flyTo({
-            center: [geoResponse.geometry.coordinates[0], geoResponse.geometry.coordinates[1]],
-            zoom: 15
-          });
-        } else {
-          map.fitBounds(geoResponse.bbox, {
-            padding: 10
-          });
-        };
-          
-      }).catch(error => {
-        console.log(error);
+      // set global long lats
+      currentX = geoResponse.geometry.coordinates[0];
+      currentY = geoResponse.geometry.coordinates[1];
+
+      // set scope
+      var iconz = document.getElementById("scope-div");
+      pointerX = geoResponse.geometry.coordinates[0];
+      pointerY = geoResponse.geometry.coordinates[1];
+      $("#scope-div").css("display", "block");
+      new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
+
+      // if geoResponse is a an address or POI do geometry, else do bbox
+      if (
+        geoResponse.place_type[0] == "address" ||
+        geoResponse.place_type[0] == "poi"
+      ) {
+        map.flyTo({
+          center: [
+            geoResponse.geometry.coordinates[0],
+            geoResponse.geometry.coordinates[1]
+          ],
+          zoom: 15
         });
-    };
+      } else {
+        map.fitBounds(geoResponse.bbox, {
+          padding: 10
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
 
 
+
+function mapLines(){
+  map.addLayer({
+    "id": "route",
+    "type": "line",
+    "source": {
+      "type": "geojson",
+      "data": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [locations[0].x, locations[0].y],
+            [locations[1].x, locations[1].y]
+          ]
+        }
+      }
+    },
+    "layout": {
+      "line-join": "round",
+      "line-cap": "round"
+    },
+    "paint": {
+      "line-color": "#888",
+      "line-width": 2,
+      "line-dasharray": [2, 5]
+    }
+
+  });
+  console.log(locations[0].x, locations[0].y),
+  console.log(locations[1].x, locations[1].y)
+}

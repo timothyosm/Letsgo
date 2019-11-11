@@ -1,5 +1,6 @@
 let addLayers = [];
 let HotelArray = [];
+let placesId = 0;
 
 function AccomRequest() {
   let settings = {
@@ -13,7 +14,7 @@ function AccomRequest() {
     }
   };
 
-  $.ajax(settings).done(function(response) {
+  $.ajax(settings).done(function (response) {
     console.log(response);
 
     for (let i = 0; i < response.result.length; i++) {
@@ -24,29 +25,32 @@ function AccomRequest() {
           response.result[i].address,
           response.result[i].min_total_price,
           response.result[i].longitude,
-          response.result[i].latitude
+          response.result[i].latitude,
+          response.result[i].url
         )
       );
-
-      map.addLayer({
-        id: "places" + [i],
-        type: "symbol",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: HotelArray
-          }
-        },
-        layout: {
-          "icon-image": "{icon}-15",
-          "icon-allow-overlap": true
-
-        }
-      });
     }
+    placesId++;
+    console.log(placesId);
+    map.addLayer({
+      id: "places" + placesId,
+      class: "target-place",
+      type: "symbol",
+      source: {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: HotelArray
+        }
+      },
+      layout: {
+        "icon-image": "{icon}-15",
+        "icon-allow-overlap": true
+      }
+    });
 
-    map.on("click", "places", function(e) {
+    map.on("click", "places" + placesId, function (e) {
+      console.log("hi");
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = e.features[0].properties.description;
 
@@ -65,7 +69,7 @@ function AccomRequest() {
   });
 }
 
-function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
+function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat, url) {
   return {
     type: "Feature",
     properties: {
@@ -76,7 +80,8 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
                   <ion-label>
                     <h3>${hotelName}</h3>
                     <p>Address: ${hotelAdd}</p>
-                    <p>Starting From (AUD): $${hotelPrice}</p>
+                    <p>Starting From (AUD): ${hotelPrice}</p>
+                    <a href=${url} target="_blank">Book now!</ion-icon></a>
                   </ion-label>
                   </ion-item>`,
       icon: "rocket"
@@ -87,21 +92,3 @@ function addHotel(photo, hotelName, hotelAdd, hotelPrice, long, lat) {
     }
   };
 }
-
-// function food(x, y) {
-//   $.ajax({
-//     url: `https://developers.zomato.com/api/v2.1/geocode?lat=${x}&lon=${y}`,
-//     method: "GET",
-//     headers: {
-//       "user-key": "bcda4dbfad87daa44b7690ccebd778db",
-
-//       "content-type": "application/json"
-//     }
-//   })
-//     .then(function(asd) {
-//       console.log(asd);
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-// }

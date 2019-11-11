@@ -19,6 +19,9 @@ let idInurl;
 
 let search;
 
+let currentTemp = [];
+let weekWeather = [];
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
@@ -43,21 +46,8 @@ function toggleLoadingScreen(state) {
   else if (state === "hide") loadingElement.addClass("ion-hide");
 }
 
-function homePage() {
-  $("#pageTitle").html(`<ion-title>Home Page</ion-title>`);
-  document.querySelector("ion-menu-controller").close();
-
-  toggleLoadingScreen("show");
-  $.ajax("./assets/javascript/views/home.html")
-    .then(response => {
-      $(".content").html(response);
-      toggleLoadingScreen("hide");
-    })
-    .catch(error => console.error(error));
-}
-
 function navPage() {
-    $("#pageTitle").html(`<ion-title>Navigation Page</ion-title>`);
+  $("#pageTitle").html(`<ion-title>Navigation Page</ion-title>`);
   document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
   $.ajax("./assets/javascript/views/maps.html")

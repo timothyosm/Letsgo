@@ -28,16 +28,9 @@ function userCheck() {
       console.log(UUID);
     };
 
-       
-    $("#unique-code").html(`<a href=".#${UUID}" target="_blank">#${UUID}</a>`)
 
     $("#unique-code").click(function () {
-      var Url = document.getElementById("paste-box");
-      Url.value = window.location.href;
-      Url.focus();
-      Url.select();  
-      document.execCommand("Copy");
-      console.log("copied")
+      CopyToClipboard();
     });
 
     database.ref(`${UUID}/locations`).on("value", function (snapshot2) {
@@ -101,3 +94,10 @@ function userCheck() {
   }
 
 };
+
+function CopyToClipboard() {
+  var text = document.createElement("textarea");
+  text.innerHTML = window.location.href;
+  Copied = text.createTextRange();
+  Copied.execCommand("Copy");
+}
