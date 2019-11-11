@@ -1,4 +1,5 @@
 let justdrawn = false;
+let urltouse;
 function userCheck() {
 
   let url = window.location.href;
@@ -19,6 +20,7 @@ function userCheck() {
       UUID = create_UUID();
       console.log('Created UUID');
       console.log(UUID);
+      $("#urlNav").html("WAWGN.COM/#"+ UUID);
 
     } else {
 
@@ -26,6 +28,9 @@ function userCheck() {
       UUID = idInurl;
       console.log('existing UUID');
       console.log(UUID);
+      urltouse = "WAWGN.COM/#"+ UUID
+      $("#urlNav").html("<a href="+urltouse+">"+urltouse+"</a>");
+
     };
 
 
@@ -95,9 +100,14 @@ function userCheck() {
 
 };
 
+
+
+
 function CopyToClipboard() {
   var text = document.createElement("textarea");
   text.innerHTML = window.location.href;
   Copied = text.createTextRange();
   Copied.execCommand("Copy");
 }
+
+
