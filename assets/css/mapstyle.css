@@ -14,11 +14,17 @@ h6 {
   height: 37px;
   margin: 0px 10px 10px 0px;
 }
+
+#holder {
+  z-index: 100;
+}
 .remove-location {
   float: right;
+  z-index:1000;
 }
 .zoom-location {
   float: right;
+  z-index:1000;
 }
 .day-cursor-target {
   font-family: Arial, Helvetica, sans-serif;
