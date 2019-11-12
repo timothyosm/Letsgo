@@ -3,6 +3,7 @@ let HotelArray = [];
 let placesId = 0;
 
 function AccomRequest() {
+  presentLoading(2500);
   let settings = {
     async: true,
     crossDomain: true,

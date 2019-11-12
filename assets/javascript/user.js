@@ -20,7 +20,12 @@ function userCheck() {
       UUID = create_UUID();
       console.log('Created UUID');
       console.log(UUID);
-      $("#urlNav").html("WAWGN.COM/#"+ UUID);
+      urltouse = location.href + "#" + UUID;
+      $("#urlNav").html(location.href + "#" + UUID);
+      $("#fbShare").attr("href", urltouse);
+      $("#waShare").attr("href", "whatsapp://send?text=Hey!%20Come%20plan%20a%20trip%20with%20me!%20Just%20follow%20this%20link!" + urltouse);
+      window.location.search + UUID;
+      addParameterToURL(UUID);
 
     } else {
 
@@ -28,8 +33,6 @@ function userCheck() {
       UUID = idInurl;
       console.log('existing UUID');
       console.log(UUID);
-      urltouse = "WAWGN.COM/#"+ UUID
-      $("#urlNav").html("<a href="+urltouse+">"+urltouse+"</a>");
 
     };
 
@@ -70,7 +73,7 @@ function userCheck() {
         idCounter = highestID;
       });
 
-      
+
       RedrawList();
 
       CenterMap();
@@ -96,6 +99,7 @@ function userCheck() {
       return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
     return uuid;
+
   }
 
 };
@@ -111,3 +115,8 @@ function CopyToClipboard() {
 }
 
 
+function addParameterToURL(param) {
+  _url = location.href;
+  _url += (_url.split('?')[1] ? '&' : '?') + param;
+  return _url;
+}
