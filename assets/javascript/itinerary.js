@@ -41,8 +41,7 @@ function Sort() {
     trip.push(currentDay);
 
   };
-  console.log('le trip');
-  console.log(trip);
+ 
 
   // This re-keys day and order for all items at their sorted position
 
@@ -78,33 +77,34 @@ function RedrawList() {
 
   for (let d = 0; d <= trip.length; d++) {
 
-    //iterate for each day
-    if (d < trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:5px; background-color: rgb(246,246,244); min-height: 180px;"></div>`);
-    if (d == trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:10px; color: lightgray; background-color: rgb(246,246,244); min-height: 50px;"></div>`);
-
-    theDay = trip[d];
-
-    $(`#day${d}-div`).append('&nbsp;&nbsp;Day ' + (d + 1));
-    for (var i in theDay) {
-
-
-      ul = $(`
-                     <ul>
-                          <ion-card style="z-index:1000; height:100%; width: 96%;" class="cursor-target" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'down')">
-                              <ion-card-header class="cursor-target" style="background-color: white;" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'up')">
-                              <ion-card-title><ion-icon ios="ios-reorder" md="md-reorder"></ion-icon>${theDay[i].name}</ion-card-title>
-                          </ion-card-header>
-                          <ion-card-content style="background-color: white;">
-                              Address:${theDay[i].address} Long:${theDay[i].x} Lat:${theDay[i].y} Day:${theDay[i].day} Order:${theDay[i].order}
-                          </ion-card-content>
-                          <ion-item style="background-color: white;">                      
-                              <ion-button class="zoom-location" data-number="${theDay[i].id}">Go To</ion-button>
-                              <ion-button class="remove-location" data-number="${theDay[i].id}">Delete</ion-button>
-                              <ion-button class="Add-event" data-number="${theDay[i].id}">Add Event</ion-button>
-                              </ion-item>
-                          </ion-card>
-                      </ul>
-              `);
+     //iterate for each day
+     if (d < trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:5px; background-color: rgb(246,246,244); min-height: 180px;"></div>`);
+     if (d == trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:10px; color: lightgray; background-color: rgb(246,246,244); min-height: 50px;"></div>`);
+ 
+     theDay = trip[d];
+ 
+     $(`#day${d}-div`).append('&nbsp;&nbsp;Day ' + (d + 1));
+     for (var i in theDay) {
+ 
+ 
+       ul = $(`
+                      <ul>
+                           <ion-card style="z-index:1000; height:100%; width: 96%;" class="cursor-target" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'down')">
+                               <ion-card-header class="cursor-target" style="background-color: white;" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'up')">
+                               <ion-card-title><ion-icon ios="ios-reorder" md="md-reorder"></ion-icon>${theDay[i].name}</ion-card-title>
+                           </ion-card-header>
+                           <ion-card-content style="background-color: white;">
+                               ${theDay[i].address}
+                           </ion-card-content>
+                           <ion-item style="background-color: white;">                      
+                               <ion-button class="zoom-location" data-number="${theDay[i].id}" onClick="theZoomButton(this)">Go To</ion-button>
+                               <ion-button class="remove-location" data-number="${theDay[i].id}" onClick="theDeleteButton(this)">Delete</ion-button>
+                               
+                               </ion-item>
+                           </ion-card>
+                       </ul>
+               `);
+              // Long:${theDay[i].x} Lat:${theDay[i].y} Day:${theDay[i].day} Order:${theDay[i].order}
 
       ul.data('d', theDay[i]);
       $(`#day${d}-div`).append(ul);
@@ -155,6 +155,46 @@ function RedrawList() {
     });
   };
 };
+
+function theDeleteButton (thispass) {
+  event.stopPropagation();
+  
+  keyToRemove = $(thispass).attr("data-number");
+  for (let i = 0; i < locations.length; i++) {
+    if (locations[i].id == keyToRemove) {
+      locations[i].marker.remove();
+      var removedLocation = locations.splice(i, 1);
+    }
+  }
+
+
+  // send the data to firebase but not the marker
+  database.ref(UUID).set({
+    locations: _(locations)
+      .map(place => {
+        return _.omit(place, ["marker"]);
+      })
+      .value()
+  });
+}
+
+
+function theZoomButton (thispass) {
+  event.stopPropagation();
+  
+  let keyToZoom = $(thispass).attr("data-number");
+  
+  for (let i = 0; i < locations.length; i++) {
+    if (locations[i].id == keyToZoom) {
+      map.flyTo({
+        center: [locations[i].x, locations[i].y],
+        zoom: 12
+      });
+      currentX = locations[i].x;
+      currentY = locations[i].y;
+    }
+  }
+}
 
 function CursorCard(thispass, pos) {
 

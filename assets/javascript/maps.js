@@ -30,7 +30,6 @@ map.on("load", function() {
     //set geoResponse with geocoder object and set global long lat variables
     geoResponse = ev.result;
     
-
     currentX = geoResponse.geometry.coordinates[0];
     currentY = geoResponse.geometry.coordinates[1];
 
@@ -113,22 +112,9 @@ $(document).ready(function() {
   userCheck();
 });
 
-// adds current location to locations array as object
-function addLocation(idCounter, name, address, x, y, day, order) {
-  return {
-    id: idCounter,
-    name: name,
-    address: address,
-    x: x,
-    y: y,
-    day: day,
-    order: order,
-    marker: new mapboxgl.Marker().setLngLat([x, y]).addTo(map)
-  };
-}
 
 $("#add-marker").on("click", async function() {
-  await weatherRequest();
+  // await weatherRequest();
 
   if (geoResponse == undefined) {
     $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
@@ -161,12 +147,52 @@ $("#add-marker").on("click", async function() {
         .value()
     });
   }
-  mapLines();
+  // mapLines();
 });
 
 // center button onclick listener
 $("#center-button").on("click", function() {
   CenterMap();
+});
+
+// accomodation button onclick listener
+$("#accom-button").on("click", function() {
+ 
+  if (currentX == 0 && currentY == 0) {
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
+    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
+  } else {
+    $("#scope-div").css("display", "none");
+    AccomRequest();
+  }
+});
+
+$("body").on("click", ".mapboxgl-ctrl-geocoder--input", function() {
+  $(this).css("color", "black");
+  $(this).select();
+});
+
+$("#search-btn1").on("click", function() {
+  let searchbox = $(".mapboxgl-ctrl-geocoder--input").val();
+  if (searchbox == "") {
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
+    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
+  } else {
+  FlyToBBox(searchbox);
+  $("._welcome_modal_card").css("display", "none");
+  splashGone = true;
+  map.addControl(geocoder, "bottom-left");
+}
+});
+
+$("#search-btn2").on("click", function() {
+  let random = chance.country({ full: true });
+  FlyToBBox(random);
+  map.addControl(geocoder, "bottom-left");
+  
+  splashGone = true;
+  $("._welcome_modal_card").css("display", "none");
+  
 });
 
 function CenterMap() {
@@ -201,97 +227,6 @@ function CenterMap() {
   }
 }
 
-// remove location click listener
-$("body").on("click", ".remove-location", function() {
-  
-  keyToRemove = $(this).attr("data-number");
-  for (let i = 0; i < locations.length; i++) {
-    if (locations[i].id == keyToRemove) {
-      locations[i].marker.remove();
-      var removedLocation = locations.splice(i, 1);
-    }
-  }
-
-
-  // send the data to firebase but not the marker
-  database.ref(UUID).set({
-    locations: _(locations)
-      .map(place => {
-        return _.omit(place, ["marker"]);
-      })
-      .value()
-  });
- 
-});
-
-$("body").on("click", ".zoom-location", function() {
-  
-  let keyToZoom = $(this).attr("data-number");
-  for (let i = 0; i < locations.length; i++) {
-    if (locations[i].id == keyToZoom) {
-      map.flyTo({
-        center: [locations[i].x, locations[i].y],
-        zoom: 12
-      });
-      currentX = locations[i].x;
-      currentY = locations[i].y;
-    }
-  }
-});
-
-// accomodation button onclick listener
-$("#accom-button").on("click", function() {
- 
-  if (currentX == 0 && currentY == 0) {
-    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
-    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
-  } else {
-    $("#scope-div").css("display", "none");
-    AccomRequest();
-  }
-});
-
-// // food button onclick listener
-// $("#food-button").on("click", function() {
-//   let x = currentX;
-//   let y = currentY;
-//   if (x == 0 && y == 0){
-//     alert('Please give us an idea of where you want to stay!');
-//   } else {
-//     food(x, y);
-//   };
-// });
-
-
-$("body").on("click", ".mapboxgl-ctrl-geocoder--input", function() {
-  $(this).css("color", "black");
-  $(this).select();
-});
-
-$("#search-btn1").on("click", function() {
-  let searchbox = $(".mapboxgl-ctrl-geocoder--input").val();
-  if (searchbox == "") {
-    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
-    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
-  } else {
-  FlyToBBox(searchbox);
-  $("._welcome_modal_card").css("display", "none");
-  splashGone = true;
-  map.addControl(geocoder, "bottom-left");
-}
-});
-
-$("#search-btn2").on("click", function() {
-  let random = chance.country({ full: true });
-  FlyToBBox(random);
-  map.addControl(geocoder, "bottom-left");
-  
-  splashGone = true;
-  $("._welcome_modal_card").css("display", "none");
-  
-});
-
-
 function mapLines() {
   map.addLayer({
     id: "route",
@@ -320,8 +255,6 @@ function mapLines() {
       "line-dasharray": [2, 5]
     }
   });
-  console.log(locations[0].x, locations[0].y),
-    console.log(locations[1].x, locations[1].y);
 }
 
 async function presentLoading(a) {
@@ -333,7 +266,7 @@ async function presentLoading(a) {
 
   const { role, data } = await loading.onDidDismiss();
 
-  console.log("Loading dismissed!");
+
   RedrawList();
 }
 
@@ -354,6 +287,19 @@ function setScope(scopeX, scopeY){
   new mapboxgl.Marker(iconz).setLngLat([scopeX, scopeY]).addTo(map);
 }
 
+// adds current location to locations array as object
+function addLocation(idCounter, name, address, x, y, day, order) {
+  return {
+    id: idCounter,
+    name: name,
+    address: address,
+    x: x,
+    y: y,
+    day: day,
+    order: order,
+    marker: new mapboxgl.Marker().setLngLat([x, y]).addTo(map)
+  };
+}
 
 
   function FlyToPlace(search, long, lat, range) {

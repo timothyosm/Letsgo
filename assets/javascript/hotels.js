@@ -56,21 +56,39 @@ function AccomRequest() {
       var coordinates = e.features[0].geometry.coordinates.slice();
       var description = e.features[0].properties.description;
       
+      //hide scope icon div
+      $("#scope-div").css("display", "none");
+
       //scrape out the name of the joint!
       let fish = description;
+      console.log(fish);
       let pointA = fish.indexOf("<h3>");
       let theGoods = fish.slice(pointA+4);
       let pointB = theGoods.indexOf("</h3>");
       
       let theName = theGoods.slice(0, pointB);
+
+      //scape out address
+      let fishAdd = description;
+      let pointC = fishAdd.indexOf("<p>Address");
+      let theGoods2 = fish.slice(pointC+12);
+      let pointD = theGoods2.indexOf("</p>");
+      
+      let theAdd = theGoods2.slice(0, pointD);
+
       let theX = e.features[0].geometry.coordinates[0];
       let theY = e.features[0].geometry.coordinates[1];
 
-      console.log(theName);
-      console.log(theX);
-      console.log(theY);
-      FlyToPlace(theName, theX, theY, 0.001);
+      // overwrite geoResponse ready for marker add
+      geoResponse.text = theName;
+      geoResponse.place_name = theAdd;
+      geoResponse.geometry.coordinates[0] = theX;
+      geoResponse.geometry.coordinates[1] = theY;
+      
+      //run fly to by name within 50m radius of hotel
+      FlyToPlace(theName, theX, theY, 0.0005);
 
+      //set geocoder input box to name text
       $(`.mapboxgl-ctrl-geocoder--input`).attr(`value`, `${theName}`);
 
       // Ensure that if the map is zoomed out such that multiple
