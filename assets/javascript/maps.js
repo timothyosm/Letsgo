@@ -202,10 +202,9 @@ function CenterMap() {
 }
 
 // remove location click listener
-
 $("body").on("click", ".remove-location", function() {
+  
   keyToRemove = $(this).attr("data-number");
-
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToRemove) {
       locations[i].marker.remove();
@@ -222,9 +221,11 @@ $("body").on("click", ".remove-location", function() {
       })
       .value()
   });
+ 
 });
 
 $("body").on("click", ".zoom-location", function() {
+  
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {

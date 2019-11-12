@@ -19,8 +19,7 @@ function Sort() {
         currentDay.push(locations[i]);
       };
     };
-
-
+   
     //bubble sort day
     let sorted = false;
     while (!sorted) {
@@ -80,31 +79,30 @@ function RedrawList() {
   for (let d = 0; d <= trip.length; d++) {
 
     //iterate for each day
-    if (d < trip.length) $('#location-list').append(`<ion-card id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="background-color: rgb(240, 240, 240); min-height: 180px;"></ion-card>`);
-    if (d == trip.length) $('#location-list').append(`<ion-card id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target" data-day="${d}" style="color: lightgray; background-color: rgb(240, 240, 240); min-height: 50px;"></ion-card>`);
+    if (d < trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="DayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:5px; background-color: rgb(246,246,244); min-height: 180px;"></div>`);
+    if (d == trip.length) $('#location-list').append(`<div id="day${d}-div" onclick="EmptyDayCursor(this)" class="connectedSortable day-cursor-target rounded" data-day="${d}" style="margin-top:10px; color: lightgray; background-color: rgb(246,246,244); min-height: 50px;"></div>`);
 
     theDay = trip[d];
 
-    $(`#day${d}-div`).append("<ion-card-content>" + 'Day ' + (d + 1) + "</ion-card-content>");
+    $(`#day${d}-div`).append('&nbsp;&nbsp;Day ' + (d + 1));
     for (var i in theDay) {
 
 
       ul = $(`
                      <ul>
-                          <ion-card>
+                          <ion-card style="z-index:1000; height:100%; width: 96%;" class="cursor-target" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'down')">
                               <ion-card-header class="cursor-target" style="background-color: white;" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'up')">
                               <ion-card-title><ion-icon ios="ios-reorder" md="md-reorder"></ion-icon>${theDay[i].name}</ion-card-title>
                           </ion-card-header>
                           <ion-card-content style="background-color: white;">
                               Address:${theDay[i].address} Long:${theDay[i].x} Lat:${theDay[i].y} Day:${theDay[i].day} Order:${theDay[i].order}
                           </ion-card-content>
-                          <ion-item style="background-color: white;">
+                          <ion-item style="background-color: white;">                      
                               <ion-button class="zoom-location" data-number="${theDay[i].id}">Go To</ion-button>
                               <ion-button class="remove-location" data-number="${theDay[i].id}">Delete</ion-button>
                               <ion-button class="Add-event" data-number="${theDay[i].id}">Add Event</ion-button>
-                              <div style="height:100%; width: 100%; float: right;" class="cursor-target" data-day="${d}" data-order="${theDay[i].order}" onclick="CursorCard(this, 'down')"
-                          </ion-item>
-                </ion-card>
+                              </ion-item>
+                          </ion-card>
                       </ul>
               `);
 
@@ -159,36 +157,35 @@ function RedrawList() {
 };
 
 function CursorCard(thispass, pos) {
-  // console.log(thispass);
-  // console.log(event.target);
 
-//   ion-card {
-//     border-top: 3px solid colorofyourchosing
-//  }
-  event.stopPropagation();
-  $(".cursor-target").css('background-color', 'white');
-  $(".day-cursor-target").css('background-color', 'rgb(240, 240, 240)');
-  $(thispass).css('background-color', 'lightblue');
-  if (pos == 'up') cursorOrder = ($(thispass).attr('data-order')) - .001;
-  if (pos == 'down') cursorOrder = ($(thispass).attr('data-order')) + .001;
-  cursorDay = ($(thispass).attr('data-day'));
+event.stopPropagation();
+$(".cursor-target").css('border', 'none');
+$(".day-cursor-target").css('background-color', 'rgb(246,246,244)');
+
+if (pos == 'up') {
+  cursorOrder = ($(thispass).attr('data-order')) - .001;
+  $(thispass).css('border-top', '5px solid lightblue');
+}
+if (pos == 'down') {
+  cursorOrder = ($(thispass).attr('data-order')) + .001;
+  $(thispass).css('border-bottom', '5px solid lightblue');
+}
+cursorDay = ($(thispass).attr('data-day'));
 }
 
 function DayCursor(thispass) {
   // event.stopPropagation();
-  console.log(event.target);
-  $(".cursor-target").css('background-color', 'white');
-  $(".day-cursor-target").css('background-color', 'rgb(240, 240, 240)');
+  $(".cursor-target").css('border', 'none');
+  $(".day-cursor-target").css('background-color', 'rgb(246,246,244)');
   $(thispass).css('background-color', 'lightblue');
   cursorDay = ($(thispass).attr('data-day'));
   cursorOrder = 999;
 }
 
 function EmptyDayCursor(thispass) {
-  $(".cursor-target").css('background-color', 'white');
-  $(".day-cursor-target").css('background-color', 'rgb(240, 240, 240)');
+  $(".cursor-target").css('border', 'none');
+  $(".day-cursor-target").css('background-color', 'rgb(246,246,244)');
   $(thispass).css('background-color', 'lightblue');
-  $(thispass).css('min-height', '180px');
   cursorDay = ($(thispass).attr('data-day'));
   cursorOrder = 0;
 }

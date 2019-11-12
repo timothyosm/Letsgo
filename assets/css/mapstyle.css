@@ -20,6 +20,10 @@ h6 {
 .zoom-location {
   float: right;
 }
+.day-cursor-target {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
 #unique-code {
   position: absolute;
   top: 20px;
