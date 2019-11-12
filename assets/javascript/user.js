@@ -20,12 +20,11 @@ function userCheck() {
       UUID = create_UUID();
       console.log('Created UUID');
       console.log(UUID);
-      urltouse = location.href + "#" + UUID;
-      $("#urlNav").html(location.href + "#" + UUID);
+      urltouse = "https://timothyosm.github.io/ProjectOne/#" + UUID;
+      $("#urlNav").html("https://timothyosm.github.io/ProjectOne/#" + UUID);
       $("#fbShare").attr("href", urltouse);
       $("#waShare").attr("href", "whatsapp://send?text=Hey!%20Come%20plan%20a%20trip%20with%20me!%20Just%20follow%20this%20link!" + urltouse);
-      window.location.search + UUID;
-      addParameterToURL(UUID);
+      // addParameterToURL(UUID);
 
     } else {
 
@@ -33,15 +32,12 @@ function userCheck() {
       UUID = idInurl;
       console.log('existing UUID');
       console.log(UUID);
-
+      $("#urlNav").html("https://timothyosm.github.io/ProjectOne/#" + idInurl);
+      
     };
 
 
-    $("#unique-code").click(function () {
-      CopyToClipboard();
-    });
-
-    database.ref(`${UUID}/locations`).on("value", function (snapshot2) {
+      database.ref(`${UUID}/locations`).on("value", function (snapshot2) {
 
       const dataRef = snapshot2.val();
 
