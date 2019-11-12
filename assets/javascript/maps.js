@@ -383,3 +383,5 @@ function addLocation(idCounter, name, address, x, y, day, order) {
       });
   }
 
+
+
