@@ -29,15 +29,13 @@ map.on("load", function() {
   geocoder.on("result", function(ev) {
     //set geoResponse with geocoder object and set global long lat variables
     geoResponse = ev.result;
+    
+
     currentX = geoResponse.geometry.coordinates[0];
     currentY = geoResponse.geometry.coordinates[1];
 
-    // add marker to map
-    var iconz = document.getElementById("scope-div");
-    pointerX = geoResponse.geometry.coordinates[0];
-    pointerY = geoResponse.geometry.coordinates[1];
-    $("#scope-div").css("display", "block");
-    new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
+    // move scope icon to geoResponse target
+    setScope(currentX, currentY);
 
     //hide splash screen
     if (splashGone == false) {
@@ -46,6 +44,7 @@ map.on("load", function() {
       map.addControl(geocoder, "bottom-left");
       $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
       $("._welcome_modal_card").css("display", "none");
+      
     }
   });
 
@@ -99,6 +98,14 @@ map.on("load", function() {
   );
 });
 
+// clickable cities listener
+map.on('click', function (e) {
+  var features = map.queryRenderedFeatures(e.point);
+  if (features[0] != undefined) {
+    FlyToPlace(features[0].properties.name, e.lngLat.lng, e.lngLat.lat, 1);
+  }
+  });
+
 $(document).ready(function() {
   //add geocoder to welcome card
   $("#search-bar-div").append(geocoder.onAdd(map));
@@ -124,9 +131,8 @@ $("#add-marker").on("click", async function() {
   await weatherRequest();
 
   if (geoResponse == undefined) {
-    $("#location-list").append(
-      "Search for a building, street or landmark first!"
-    );
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
+    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
   } else {
     $("#scope-div").css("display", "none");
 
@@ -196,10 +202,9 @@ function CenterMap() {
 }
 
 // remove location click listener
-
 $("body").on("click", ".remove-location", function() {
+  
   keyToRemove = $(this).attr("data-number");
-
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToRemove) {
       locations[i].marker.remove();
@@ -207,8 +212,6 @@ $("body").on("click", ".remove-location", function() {
     }
   }
 
-  console.log("locations array after Delete Marker:");
-  console.log(locations);
 
   // send the data to firebase but not the marker
   database.ref(UUID).set({
@@ -218,17 +221,18 @@ $("body").on("click", ".remove-location", function() {
       })
       .value()
   });
+ 
 });
 
 $("body").on("click", ".zoom-location", function() {
+  
   let keyToZoom = $(this).attr("data-number");
   for (let i = 0; i < locations.length; i++) {
     if (locations[i].id == keyToZoom) {
       map.flyTo({
         center: [locations[i].x, locations[i].y],
-        zoom: 10
+        zoom: 12
       });
-
       currentX = locations[i].x;
       currentY = locations[i].y;
     }
@@ -237,23 +241,12 @@ $("body").on("click", ".zoom-location", function() {
 
 // accomodation button onclick listener
 $("#accom-button").on("click", function() {
-  // let zoomLevel = map.getZoom();
-  // alert(zoomLevel);
-  // if (zoomLevel < 10) {
-  //   alert('Search is too broad. You need to zoom in further to display Accomodation');
-  // } else {
-  //   alert('display accomodation layer');
-  // };
-
-  let x = currentX;
-  let y = currentY;
-
-  if (x == 0 && y == 0) {
-    console.log("Please give us an idea of where you want to stay!");
+ 
+  if (currentX == 0 && currentY == 0) {
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
+    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
   } else {
-    console.log("Coordinates of point of focus:");
-    console.log(x + ":" + y);
-
+    $("#scope-div").css("display", "none");
     AccomRequest();
   }
 });
@@ -269,65 +262,35 @@ $("#accom-button").on("click", function() {
 //   };
 // });
 
+
+$("body").on("click", ".mapboxgl-ctrl-geocoder--input", function() {
+  $(this).css("color", "black");
+  $(this).select();
+});
+
 $("#search-btn1").on("click", function() {
   let searchbox = $(".mapboxgl-ctrl-geocoder--input").val();
-
+  if (searchbox == "") {
+    $(".mapboxgl-ctrl-geocoder--input").attr("value", "Search a place first!");
+    $(".mapboxgl-ctrl-geocoder--input").css("color", "darkred");
+  } else {
   FlyToBBox(searchbox);
   $("._welcome_modal_card").css("display", "none");
   splashGone = true;
   map.addControl(geocoder, "bottom-left");
+}
 });
 
 $("#search-btn2").on("click", function() {
   let random = chance.country({ full: true });
   FlyToBBox(random);
   map.addControl(geocoder, "bottom-left");
+  
   splashGone = true;
   $("._welcome_modal_card").css("display", "none");
+  
 });
 
-function FlyToBBox(search) {
-  $.ajax({
-    url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
-    method: "GET"
-  })
-    .then(function(fuzzyReply) {
-      geoResponse = fuzzyReply.features[0];
-      $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
-
-      // set global long lats
-      currentX = geoResponse.geometry.coordinates[0];
-      currentY = geoResponse.geometry.coordinates[1];
-
-      // set scope
-      var iconz = document.getElementById("scope-div");
-      pointerX = geoResponse.geometry.coordinates[0];
-      pointerY = geoResponse.geometry.coordinates[1];
-      $("#scope-div").css("display", "block");
-      new mapboxgl.Marker(iconz).setLngLat([pointerX, pointerY]).addTo(map);
-
-      // if geoResponse is a an address or POI do geometry, else do bbox
-      if (
-        geoResponse.place_type[0] == "address" ||
-        geoResponse.place_type[0] == "poi"
-      ) {
-        map.flyTo({
-          center: [
-            geoResponse.geometry.coordinates[0],
-            geoResponse.geometry.coordinates[1]
-          ],
-          zoom: 15
-        });
-      } else {
-        map.fitBounds(geoResponse.bbox, {
-          padding: 10
-        });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
 
 function mapLines() {
   map.addLayer({
@@ -376,6 +339,8 @@ async function presentLoading(a) {
 
 $("#close-btn").click(function() {
   $("._welcome_modal_card").hide();
+  splashGone = true;
+  map.addControl(geocoder, "bottom-left");
   event.stopPropagation();
 });
 
@@ -387,3 +352,88 @@ function darkMode() {
     map.setStyle("mapbox://styles/mapbox/light-v10");
   }
 }
+
+function setScope(scopeX, scopeY){
+  var iconz = document.getElementById("scope-div");
+  $("#scope-div").css("display", "block");
+  new mapboxgl.Marker(iconz).setLngLat([scopeX, scopeY]).addTo(map);
+}
+
+
+
+  function FlyToPlace(search, long, lat, range) {
+
+    let a = long-range;
+    let b = lat-range;
+    let c = long+range;
+    let d = lat+range;
+
+    $.ajax({
+      url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?bbox=${a},${b},${c},${d}&access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
+      method: "GET"
+    })
+      .then(function(fuzzyReply) {
+        
+        if (fuzzyReply.features[0] != undefined) {
+          geoResponse = fuzzyReply.features[0];
+        
+        $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
+ 
+        currentX = geoResponse.geometry.coordinates[0];
+        currentY = geoResponse.geometry.coordinates[1];
+        setScope(currentX, currentY);
+
+        var zoomLevel = map.getZoom();  
+        map.flyTo({
+                center: [
+                  geoResponse.geometry.coordinates[0],
+                  geoResponse.geometry.coordinates[1]
+                ],
+                zoom: zoomLevel
+              });
+      }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+  
+
+  function FlyToBBox(search) {
+    $.ajax({
+      url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${search}.json?access_token=pk.eyJ1IjoiY2JhdCIsImEiOiJjazJldXB2cnYwY2poM2ZvMjlrenB4MHNkIn0.H1pPRgzwWigP441VDUyWkQ&cachebuster=1573056323881&autocomplete=true`,
+      method: "GET"
+    })
+      .then(function(fuzzyReply) {
+        geoResponse = fuzzyReply.features[0];
+        $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
+  
+        // set global long lats
+        currentX = geoResponse.geometry.coordinates[0];
+        currentY = geoResponse.geometry.coordinates[1];
+  
+        setScope(currentX, currentY);
+  
+        // if geoResponse is a an address or POI do geometry, else do bbox
+        if (
+          geoResponse.place_type[0] == "address" ||
+          geoResponse.place_type[0] == "poi"
+        ) {
+          map.flyTo({
+            center: [
+              geoResponse.geometry.coordinates[0],
+              geoResponse.geometry.coordinates[1]
+            ],
+            zoom: 15
+          });
+        } else {
+          map.fitBounds(geoResponse.bbox, {
+            padding: 10
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
