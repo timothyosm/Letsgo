@@ -278,9 +278,8 @@ $("#close-btn").click(function() {
 });
 
 function darkMode() {
-  var toggle = map.setStyle("mapbox://styles/mapbox/dark-v10");
   if (document.getElementById("darkmode").classList.toggle("toggle-checked")) {
-    toggle;
+    map.setStyle("mapbox://styles/mapbox/dark-v10");
   } else {
     map.setStyle("mapbox://styles/mapbox/light-v10");
   }
