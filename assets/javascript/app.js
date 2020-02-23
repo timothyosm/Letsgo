@@ -22,6 +22,8 @@ let search;
 let currentTemp = [];
 let weekWeather = [];
 
+let mapSearchAddedForMobile = false;
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",

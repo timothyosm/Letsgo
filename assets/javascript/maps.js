@@ -45,6 +45,11 @@ map.on("load", function() {
       $("._welcome_modal_card").css("display", "none");
       
     }
+
+
+
+
+
   });
 
   // Insert the layer beneath any symbol layer.
@@ -110,6 +115,18 @@ $(document).ready(function() {
   $("#search-bar-div").append(geocoder.onAdd(map));
   //run user js stuff
   userCheck();
+
+    if (screen.width < 481) { 
+      // window width is less than 480px
+      if (mapSearchAddedForMobile==false) {
+        // window width is less than 480px
+        map.addControl(geocoder, "bottom-left");
+        mapSearchAdded = true;
+        $("._welcome_modal_card").css("display", "none");
+      }
+
+    }
+
 });
 
 
