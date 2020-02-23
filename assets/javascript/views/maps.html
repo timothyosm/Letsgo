@@ -18,6 +18,7 @@
       transform: translate(-50%, -50%);
       width: 100%;
       z-index: 200;
+      min-width: 480px;
     }
 
     ._welcome_modal_card ion-card {
@@ -35,6 +36,8 @@
       float: right;
       z-index: 300;
     }
+
+
 
     @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
       ._welcome_modal_card {
@@ -56,6 +59,7 @@
         text-align: center;
         align-content: center;
       }
+    }
 
       @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
         ._welcome_modal_card {
@@ -67,7 +71,16 @@
           z-index: 200;
         }
       }
+    
+      @media screen and (max-width: 480px) {
+        ._welcome_modal_card {
+          position: absolute;
+          display: none;
+    
+      }
     }
+
+    
   </style>
     <div class="_welcome_modal_card">
     <ion-card class="animation-fade-in">
@@ -89,35 +102,28 @@
       </ion-card-content>
       <ion-card-title style="margin-left: 5%; font-size: 1 rem;">Quick Guide
       </ion-card-title>
-    <ion-item>
-      <ion-card-content>
-
-
-
-
-        <ul>
-          <ion-icon name="checkmark"></ion-icon> Add the location to your itinerary
+      <ion-card-content style="position: relative; float: left; width: 55%">
+  
+        <ul style="color:black;">
+          <ion-icon name="checkmark" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Add the location to itinerary
         </ul>
-        <ul>
-          <ion-icon name="locate"></ion-icon> Zoom in on your last search
+        <ul style="color:black;">
+          <ion-icon name="locate" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Zoom in on your last search
         </ul>
-        <ul>
-          <ion-icon name="home"></ion-icon> Search for Hotels in the area
+        <ul style="color:black;">
+          <ion-icon name="home" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Search for Hotels in the area
         </ul>
       </ion-card-content>
-
       <ion-card-content>
-
         <!-- <ul>
           <ion-icon name="pizza"></ion-icon> Show food on the map
         </ul> -->
-        <ul><ion-icon name="calendar"></ion-icon> Set the first date of your holiday</ul>
-        <ul>
-            <ion-icon ios="ios-reorder" md="md-reorder"></ion-icon> Drag and Drop your locations to different days
+        <ul style="color:black;"><ion-icon name="calendar" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Set the start date of your holiday</ul>
+        <ul style="color:black;">
+            <ion-icon ios="ios-reorder" md="md-reorder" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Drag and Drop your locations to different days
 
         </ul>
       </ion-card-content>
-    </ion-item>
 
 
     </ion-card>

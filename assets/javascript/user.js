@@ -20,8 +20,8 @@ function userCheck() {
       UUID = create_UUID();
       console.log('Created UUID');
       console.log(UUID);
-      urltouse = "https://timothyosm.github.io/ProjectOne/#" + UUID;
-      $("#urlNav").html("https://timothyosm.github.io/ProjectOne/#" + UUID);
+      urltouse = "https://jpmc3630.github.io/letsgo/#" + UUID;
+      $("#urlNav").html("https://jpmc3630.github.io/letsgo/#" + UUID);
       $("#fbShare").attr("href", urltouse);
       $("#waShare").attr("href", "whatsapp://send?text=Hey!%20Come%20plan%20a%20trip%20with%20me!%20Just%20follow%20this%20link!" + urltouse);
       // addParameterToURL(UUID);
@@ -32,7 +32,7 @@ function userCheck() {
       UUID = idInurl;
       console.log('existing UUID');
       console.log(UUID);
-      $("#urlNav").html("https://timothyosm.github.io/ProjectOne/#" + idInurl);
+      $("#urlNav").html("https://jpmc3630.github.io/letsgo/#" + idInurl);
       
     };
 

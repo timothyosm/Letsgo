@@ -22,6 +22,8 @@ let search;
 let currentTemp = [];
 let weekWeather = [];
 
+let mapSearchAddedForMobile = false;
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyAtogxznLTcME9-Fch0xKwxo0SKNqpuSlc",
@@ -48,7 +50,6 @@ function toggleLoadingScreen(state) {
 
 function navPage() {
   $("#pageTitle").html(`<ion-title>Navigation Page</ion-title>`);
-  document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
   $.ajax("./assets/javascript/views/maps.html")
     .then(response => {
@@ -60,7 +61,6 @@ function navPage() {
 
 function itePage() {
   $("#pageTitle").html(`<ion-title>Itinerary Page</ion-title>`);
-  document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
   $.ajax("./assets/HTMLPages/itinerary.html")
     .then(response => {
@@ -72,7 +72,6 @@ function itePage() {
 
 function chatPage() {
   $("#pageTitle").html(`<ion-title>Live Chat Page</ion-title>`);
-  document.querySelector("ion-menu-controller").close();
   toggleLoadingScreen("show");
   $.ajax("./assets/HTMLPages/construction.html")
     .then(response => {

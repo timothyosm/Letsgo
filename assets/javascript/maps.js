@@ -43,8 +43,8 @@ map.on("load", function() {
       map.addControl(geocoder, "bottom-left");
       $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
       $("._welcome_modal_card").css("display", "none");
-      
     }
+    
   });
 
   // Insert the layer beneath any symbol layer.
@@ -110,6 +110,17 @@ $(document).ready(function() {
   $("#search-bar-div").append(geocoder.onAdd(map));
   //run user js stuff
   userCheck();
+
+    if (screen.width < 481) { 
+      // window width is less than 480px
+      if (mapSearchAddedForMobile==false) {
+        // window width is less than 480px
+        map.addControl(geocoder, "bottom-left");
+        mapSearchAdded = true;
+        $("._welcome_modal_card").css("display", "none");
+      }
+    }
+
 });
 
 
@@ -278,9 +289,8 @@ $("#close-btn").click(function() {
 });
 
 function darkMode() {
-  var toggle = map.setStyle("mapbox://styles/mapbox/dark-v10");
   if (document.getElementById("darkmode").classList.toggle("toggle-checked")) {
-    toggle;
+    map.setStyle("mapbox://styles/mapbox/dark-v10");
   } else {
     map.setStyle("mapbox://styles/mapbox/light-v10");
   }
