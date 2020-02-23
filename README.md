@@ -7,6 +7,7 @@ View it live at: <https://jpmc3630.github.io/letsgo/>
 ![LetsGo](https://github.com/jpmc3630/project2/blob/master/public/images/Screenshot3.png)
 ![LetsGo](https://github.com/jpmc3630/project2/blob/master/public/images/Screenshot3.png)
 
+<iframe src="https://drive.google.com/file/d/16_VjLVkhSITOX831nFPQRijBTiaOLIkF/preview" width="640" height="480"></iframe>
 
 ## About
 
