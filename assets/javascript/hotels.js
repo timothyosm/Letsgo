@@ -7,7 +7,7 @@ function AccomRequest() {
   let settings = {
     async: true,
     crossDomain: true,
-    url: `https://apidojo-booking-v1.p.rapidapi.com/properties/list?price_filter_currencycode=AU&search_id=none&order_by=distance&longitude=${currentX}&latitude=${currentY}&children_qty=2&languagecode=en-us&children_age=5%2C7&search_type=latlong&offset=0&dest_ids=0&guest_qty=1&arrival_date=2020-03-13&departure_date=2020-03-15&room_qty=1`,
+    url: `https://apidojo-booking-v1.p.rapidapi.com/properties/list?price_filter_currencycode=AU&search_id=none&order_by=distance&longitude=${currentX}&latitude=${currentY}&children_qty=2&languagecode=en-us&children_age=5%2C7&search_type=latlong&offset=0&dest_ids=0&guest_qty=1&arrival_date=2021-03-13&departure_date=2021-03-15&room_qty=1`,
     method: "GET",
     headers: {
       "x-rapidapi-host": "apidojo-booking-v1.p.rapidapi.com",
