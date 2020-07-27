@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<script>
+
+var settings = {
+	"async": true,
+	"crossDomain": true,
+    "url": "https://apidojo-kayak-v1.p.rapidapi.com/flights/create-session?origin1=SGN&destination1=DAD&departdate1=2020-01-01&cabin=e&currency=USD&adults=1&bags=0",
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "apidojo-kayak-v1.p.rapidapi.com",
+		"x-rapidapi-key": "5e09f4d7b7msh4cc31226f41c0dcp1a9b37jsnc20d3147bf56"
+	}
+}
+
+$.ajax(settings).done(function (response) {
+	console.log(response);
+});
+
+
+</script>
+
+</html>
