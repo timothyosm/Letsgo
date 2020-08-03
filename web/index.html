@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <script src="https://chancejs.com/chance.min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+  <link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css" rel="stylesheet" />
+  <script
+    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js"></script>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css"
+    type="text/css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
+  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script src="./assets/javascript/app.js"></script>
+
+  <link rel="icon" href="/assets/images/icon.png">
+  <title>Itinerary</title>
+</head>
+
+<body>
+  <div class="blackout"></div>
+  <ion-app class="appPage">
+    <ion-menu side="start">
+      <ion-header>
+        <ion-toolbar translucent>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-menu-toggle>
+            <ion-item onclick="navPage()">
+              <ion-icon name="navigate" slot="start"></ion-icon>
+              <ion-label>Map</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item onclick="itePage()">
+              <ion-icon name="list" slot="start"></ion-icon>
+              <ion-label>Itinerary</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+          <ion-item onclick="chatPage()">
+            <ion-icon name="chatbubbles" slot="start"></ion-icon>
+            <ion-label>Live Chat</ion-label>
+          </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+          <ion-item onclick="darkMode()">
+            <ion-label>Dark Mode</ion-label>
+            <ion-toggle
+              onclick="darkMode()"
+              id="darkmode"
+              slot="start"
+              name="darkmode"
+              color="dark"
+              unchecked
+            ></ion-toggle>
+          </ion-item>
+        </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <div class="ion-page" main>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-row>
+            <ion-col>
+              <div id="pageTitle"></div>
+            </ion-col>
+            <ion-col>
+              <!-- <div style="float:right;">
+                <ion-card-title>Send this link to your freinds to collaborate!</ion-card-title>
+              <ion-card-form  id="urlNav"style="-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text; user-select: text;" >
+              </ion-card-form>      
+            </div> -->
+              <ion-card-form id="urlNav"
+                style="color:gray;float:right;-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text; user-select: text;">
+                </ion-content>
+
+
+
+
+
+            </ion-col>
+          </ion-row>
+        </ion-toolbar>
+
+
+
+      </ion-header>
+      <ion-content>
+        <div class="loading ion-hide">
+          <ion-spinner></ion-spinner>
+        </div>
+        <div class="content"></div>
+      </ion-content>
+    </div>
+  </ion-app>
+  <ion-menu-controller></ion-menu-controller>
+</body>
+
+</html>

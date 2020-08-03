@@ -44,6 +44,7 @@ map.on("load", function() {
       $(".mapboxgl-ctrl-geocoder--input").attr("value", geoResponse.place_name);
       $("._welcome_modal_card").css("display", "none");
     }
+    
   });
 
   // Insert the layer beneath any symbol layer.
@@ -118,7 +119,6 @@ $(document).ready(function() {
         mapSearchAdded = true;
         $("._welcome_modal_card").css("display", "none");
       }
-
     }
 
 });

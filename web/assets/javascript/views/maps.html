@@ -1,0 +1,228 @@
+<head>
+  <script src="./assets/javascript/lib/jquery.ui.touch-punch.min.js"></script>
+  <link href="./assets/css/mapstyle.css" rel="stylesheet" />
+  <script src="./assets/javascript/itinerary.js"></script>
+  <script src="./assets/javascript/user.js"></script>
+  <script src="./assets/javascript/maps.js"></script>
+  <script src="./assets/javascript/hotels.js"></script>
+  <script src="./assets/javascript/weather.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet" />
+
+  <style>
+    ._welcome_modal_card {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 200;
+      min-width: 480px;
+    }
+
+    ._welcome_modal_card ion-card {
+      background: white;
+      font-family: 'Roboto', sans-serif;
+      overflow: visible;
+    }
+
+    #search-bar-div {
+      text-align: center;
+      align-content: center;
+    }
+
+    #close {
+      float: right;
+      z-index: 300;
+    }
+
+
+
+    @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
+      ._welcome_modal_card {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 200;
+      }
+
+      ._welcome_modal_card ion-card {
+        background: white;
+        font-family: 'Roboto', sans-serif;
+        overflow: visible;
+      }
+
+      #search-bar-div {
+        text-align: center;
+        align-content: center;
+      }
+    }
+
+      @media screen and (min-device-width: 1200px) and (max-device-width: 1920px) and (-webkit-min-device-pixel-ratio: 1) {
+        ._welcome_modal_card {
+          position: absolute;
+          top: 30%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 35%;
+          z-index: 200;
+        }
+      }
+    
+      @media screen and (max-width: 480px) {
+        ._welcome_modal_card {
+          position: absolute;
+          display: none;
+    
+      }
+    }
+
+    
+  </style>
+    <div class="_welcome_modal_card">
+    <ion-card class="animation-fade-in">
+        <button id="close-btn"><ion-icon name="close"></ion-icon></button>
+      <ion-card-header>
+        <ion-card-title style="text-align: center; font-size: 1.5rem;">
+          Where Would You Like To Go Next ?
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div id="search-bar-div"></div>
+
+        <ion-button id="search-btn1" style="position: relative;margin-top: 1rem;" size="medium">GO
+        </ion-button>
+        <ion-button id="search-btn2" style="position: relative;margin-top: 1rem;" size="medium">I'm
+          Feeling Lucky</ion-button>
+
+      </ion-card-content>
+      <ion-card-title style="margin-left: 5%; font-size: 1 rem;">Quick Guide
+      </ion-card-title>
+      <ion-card-content style="position: relative; float: left; width: 55%">
+  
+        <ul style="color:black;">
+          <ion-icon name="checkmark" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Add the location to itinerary
+        </ul>
+        <ul style="color:black;">
+          <ion-icon name="locate" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Zoom in on your last search
+        </ul>
+        <ul style="color:black;">
+          <ion-icon name="home" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Search for Hotels in the area
+        </ul>
+      </ion-card-content>
+      <ion-card-content>
+        <!-- <ul>
+          <ion-icon name="pizza"></ion-icon> Show food on the map
+        </ul> -->
+        <ul style="color:black;"><ion-icon name="calendar" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Set the start date of your holiday</ul>
+        <ul style="color:black;">
+            <ion-icon ios="ios-reorder" md="md-reorder" style="position:relative; top: 2px;"></ion-icon> &nbsp;&nbsp; Drag and Drop your locations to different days
+
+        </ul>
+      </ion-card-content>
+
+
+    </ion-card>
+  </div>
+
+</head>
+
+<div class="flex-parent card viewport-full relative scroll-hidden">
+  <div class="flex-child card-head flex-child--grow bg-darken10 viewport-half " id="map">
+    <div style="height: 60px; width: 60px; position:absolute; z-index:100; display: none;" id="scope-div">
+      <img src="https://cdn2.iconfinder.com/data/icons/interface-line-set/24/icn-scope-512.png" />
+    </div>
+  </div>
+
+  <div id="cardholda" class="card-body scroll-styled scroll-auto h120 pb-2">
+
+    <div class="card-title">
+
+      <ion-button type="button" id="add-marker" value="Add Location">
+        <ion-icon name="checkmark" value="Add Location"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="center-button" value="Centre Map">
+        <ion-icon name="locate"></ion-icon>
+      </ion-button>
+      <ion-button type="button" id="accom-button" value="Show Accomodation">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+      <!-- <ion-button type="button" id="food-button" value="Show Food">
+        <ion-icon name="pizza"></ion-icon> -->
+      </ion-button>
+      <ion-button>
+        <ion-icon name="calendar"></ion-icon>
+
+        <ion-datetime value="2019-11-20"></ion-datetime>
+      </ion-button>
+
+
+      <script>
+        $(function () {
+          $('input[name="firstdate"]').daterangepicker({
+            "singleDatePicker": true,
+            "autoApply": true,
+            "startDate": "11/01/2019",
+            "endDate": "11/07/2019",
+            "drops": "up",
+            "buttonClasses": "ion-button",
+            "applyButtonClasses": "ion-button",
+            "cancelClass": "ion-button"
+          }, function (start) {
+            console.log(start.format());
+            database.ref(UUID).set({
+              firstDate: start.format()
+            });
+          });
+        });
+      </script>
+
+      <div></div>
+
+
+
+
+      <div id="location-list"></div>
+      <div id="display"></div>
+
+      <div id="unique-code">
+
+        <!-- Sharingbutton Facebook -->
+        <a id="fbShare" class="resp-sharing-button__link"
+        href=""
+          target="_blank" rel="noopener" aria-label="">
+          <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small">
+            <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solidcircle">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  d="M12 0C5.38 0 0 5.38 0 12s5.38 12 12 12 12-5.38 12-12S18.62 0 12 0zm3.6 11.5h-2.1v7h-3v-7h-2v-2h2V8.34c0-1.1.35-2.82 2.65-2.82h2.35v2.3h-1.4c-.25 0-.6.13-.6.66V9.5h2.34l-.24 2z" />
+              </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Sharingbutton WhatsApp -->
+        <a id = "waShare" class="resp-sharing-button__link"
+        href="" target="_blank"
+          rel="noopener" aria-label="">
+          <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small">
+            <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solidcircle">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
+                <path
+                  d="m12 0c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12zm0 3.8c2.2 0 4.2 0.9 5.7 2.4 1.6 1.5 2.4 3.6 2.5 5.7 0 4.5-3.6 8.1-8.1 8.1-1.4 0-2.7-0.4-3.9-1l-4.4 1.1 1.2-4.2c-0.8-1.2-1.1-2.6-1.1-4 0-4.5 3.6-8.1 8.1-8.1zm0.1 1.5c-3.7 0-6.7 3-6.7 6.7 0 1.3 0.3 2.5 1 3.6l0.1 0.3-0.7 2.4 2.5-0.7 0.3 0.099c1 0.7 2.2 1 3.4 1 3.7 0 6.8-3 6.9-6.6 0-1.8-0.7-3.5-2-4.8s-3-2-4.8-2zm-3 2.9h0.4c0.2 0 0.4-0.099 0.5 0.3s0.5 1.5 0.6 1.7 0.1 0.2 0 0.3-0.1 0.2-0.2 0.3l-0.3 0.3c-0.1 0.1-0.2 0.2-0.1 0.4 0.2 0.2 0.6 0.9 1.2 1.4 0.7 0.7 1.4 0.9 1.6 1 0.2 0 0.3 0.001 0.4-0.099s0.5-0.6 0.6-0.8c0.2-0.2 0.3-0.2 0.5-0.1l1.4 0.7c0.2 0.1 0.3 0.2 0.5 0.3 0 0.1 0.1 0.5-0.099 1s-1 0.9-1.4 1c-0.3 0-0.8 0.001-1.3-0.099-0.3-0.1-0.7-0.2-1.2-0.4-2.1-0.9-3.4-3-3.5-3.1s-0.8-1.1-0.8-2.1c0-1 0.5-1.5 0.7-1.7s0.4-0.3 0.5-0.3z" />
+              </svg>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div>
+        <div id="location-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
